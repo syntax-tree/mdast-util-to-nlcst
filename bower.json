@@ -1,0 +1,34 @@
+{
+  "name": "mdast-util-to-nlcst",
+  "main": "mdast-util-to-nlcst.js",
+  "description": "Markdown to Natural Language",
+  "license": "MIT",
+  "keywords": [
+    "mdast",
+    "nlcst",
+    "markdown",
+    "natural",
+    "language"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wooorm/mdast-util-to-nlcst.git"
+  },
+  "authors": [
+    "Titus Wormer <tituswormer@gmail.com>"
+  ],
+  "ignore": [
+    ".*",
+    "*.log",
+    "*.md",
+    "build/",
+    "components/",
+    "coverage/",
+    "node_modules/",
+    "test/",
+    "build.js",
+    "index.js",
+    "component.json",
+    "package.json"
+  ]
+}

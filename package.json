@@ -1,0 +1,61 @@
+{
+  "name": "mdast-util-to-nlcst",
+  "version": "0.0.0",
+  "description": "Markdown to Natural Language",
+  "license": "MIT",
+  "keywords": [
+    "mdast",
+    "nlcst",
+    "markdown",
+    "natural",
+    "language"
+  ],
+  "dependencies": {
+    "mdast-range": "^0.4.3",
+    "mdast-util-visit": "^0.1.1",
+    "parse-latin": "^0.5.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wooorm/mdast-util-to-nlcst.git"
+  },
+  "author": {
+    "name": "Titus Wormer",
+    "email": "tituswormer@gmail.com"
+  },
+  "files": [
+    "index.js",
+    "LICENSE"
+  ],
+  "devDependencies": {
+    "browserify": "^11.0.0",
+    "eslint": "^0.24.0",
+    "esmangle": "^1.0.0",
+    "istanbul": "^0.3.0",
+    "jscs": "^1.0.0",
+    "jscs-jsdoc": "^1.0.0",
+    "mdast": "^0.27.0",
+    "mdast-github": "^0.3.0",
+    "mdast-lint": "^0.4.0",
+    "mdast-yaml-config": "^0.2.0",
+    "mocha": "^2.0.0",
+    "nlcst-to-string": "^0.1.5",
+    "parse-dutch": "^0.5.0",
+    "parse-english": "^0.5.0"
+  },
+  "scripts": {
+    "test-api": "mocha --check-leaks test/index.js",
+    "test-coveralls": "istanbul cover _mocha --report lcovonly -- --check-leaks test/index.js",
+    "test-coverage": "istanbul cover _mocha -- test/index.js",
+    "test-travis": "npm run test-coveralls",
+    "test": "npm run test-api",
+    "lint-api": "eslint .",
+    "lint-style": "jscs --reporter inline .",
+    "lint": "npm run lint-api && npm run lint-style",
+    "make": "npm run lint && npm run test-coverage",
+    "bundle": "browserify index.js --no-builtins -s mdastUtilToNLCST > mdast-util-to-nlcst.js",
+    "postbundle": "esmangle mdast-util-to-nlcst.js > mdast-util-to-nlcst.min.js",
+    "build-md": "mdast . --output --quiet",
+    "build": "npm run bundle && npm run build-md"
+  }
+}
