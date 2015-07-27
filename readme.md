@@ -1,4 +1,4 @@
-# mdast-util-to-nlcst [![Build Status](https://img.shields.io/travis/wooorm/mdast-util-to-nlcst.svg?style=flat)](https://travis-ci.org/wooorm/mdast-util-to-nlcst) [![Coverage Status](https://img.shields.io/coveralls/wooorm/mdast-util-to-nlcst.svg?style=flat)](https://coveralls.io/r/wooorm/mdast-util-to-nlcst?branch=master)
+# mdast-util-to-nlcst [![Build Status](https://img.shields.io/travis/wooorm/mdast-util-to-nlcst.svg)](https://travis-ci.org/wooorm/mdast-util-to-nlcst) [![Coverage Status](https://img.shields.io/codecov/c/github/wooorm/mdast-util-to-nlcst.svg)](https://codecov.io/github/wooorm/mdast-util-to-nlcst)
 
 [**mdast**](https://github.com/wooorm/mdast) utility to transform markdown
 into [**nlcst**](https://github.com/wooorm/nlcst), while keeping location
