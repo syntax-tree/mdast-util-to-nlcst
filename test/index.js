@@ -10,7 +10,7 @@ var assert = require('assert');
 var fs = require('fs');
 var path = require('path');
 var mdast = require('mdast');
-var File = require('mdast/lib/file');
+var VFile = require('vfile');
 var Dutch = require('parse-dutch');
 var English = require('parse-english');
 var toNLCST = require('..');
@@ -69,7 +69,7 @@ describe('mdast-util-visit', function () {
     });
 
     it('should fail when not given a positional information', function () {
-        var file = new File();
+        var file = new VFile();
 
         assert.throws(function () {
             toNLCST({
@@ -91,7 +91,7 @@ describe('mdast-util-visit', function () {
     });
 
     it('should accept nodes without offsets', function () {
-        var file = new File();
+        var file = new VFile();
         var node = {
             'type': 'text',
             'value': 'foo',
@@ -114,7 +114,7 @@ describe('mdast-util-visit', function () {
     });
 
     it('should accept an optional parser', function () {
-        var file = new File();
+        var file = new VFile();
         var node = {
             'type': 'text',
             'value': 'foo',
@@ -166,7 +166,10 @@ function describeFixture(fixture) {
         mdast().process(input, function (err, doc, file) {
             done(err);
 
-            assert.deepEqual(toNLCST(file.ast, file), JSON.parse(output));
+            assert.deepEqual(
+                toNLCST(file.namespace('mdast').ast, file),
+                JSON.parse(output)
+            );
         });
     });
 }

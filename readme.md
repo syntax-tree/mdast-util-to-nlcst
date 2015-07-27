@@ -36,7 +36,7 @@ var toNLCST = require('mdast-util-to-nlcst');
  */
 
 mdast.process('Some *foo*s-_ball_.', function (err, doc, file) {
-    var nlcst = toNLCST(file.ast, file);
+    var nlcst = toNLCST(file.namespace('mdast').ast, file);
     /*
      * Yields:
      *

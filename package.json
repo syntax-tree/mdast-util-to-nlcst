@@ -41,7 +41,8 @@
     "mocha": "^2.0.0",
     "nlcst-to-string": "^0.1.5",
     "parse-dutch": "^0.5.0",
-    "parse-english": "^0.5.0"
+    "parse-english": "^0.5.0",
+    "vfile": "^1.0.0"
   },
   "scripts": {
     "test-api": "mocha --check-leaks test/index.js",
