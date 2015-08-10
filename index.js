@@ -1,6 +1,7 @@
 /**
  * @author Titus Wormer
- * @copyright 2015 Titus Wormer. All rights reserved.
+ * @copyright 2015 Titus Wormer
+ * @license MIT
  * @module mdast:util:to-nlcst
  * @fileoverview Create a Natural Language Concrete Syntax Tree from
  *   a Markdown Abstract Syntax Tree.
