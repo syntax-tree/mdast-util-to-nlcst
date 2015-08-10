@@ -38,7 +38,7 @@ var fixtures = fs.readdirSync(ROOT);
  * Tests.
  */
 
-describe('mdast-util-visit', function () {
+describe('mdast-util-to-nlcst', function () {
     it('should fail when not given an AST', function () {
         assert.throws(function () {
             toNLCST();
@@ -155,7 +155,7 @@ describe('mdast-util-visit', function () {
 /**
  * Describe a fixture.
  *
- * @param {string} fixture
+ * @param {string} fixture - Name of fixture.
  */
 function describeFixture(fixture) {
     it('should work on `' + fixture + '`', function (done) {

@@ -12,8 +12,8 @@
   ],
   "dependencies": {
     "mdast-range": "^0.4.3",
-    "mdast-util-visit": "^0.1.1",
-    "parse-latin": "^0.5.1"
+    "parse-latin": "^0.5.1",
+    "unist-util-visit": "^1.0.0"
   },
   "repository": {
     "type": "git",
@@ -29,12 +29,12 @@
   ],
   "devDependencies": {
     "browserify": "^11.0.0",
-    "eslint": "^0.24.0",
+    "eslint": "^1.1.0",
     "esmangle": "^1.0.0",
     "istanbul": "^0.3.0",
-    "jscs": "^1.0.0",
+    "jscs": "^2.0.0",
     "jscs-jsdoc": "^1.0.0",
-    "mdast": "^0.27.0",
+    "mdast": "^0.29.0",
     "mdast-github": "^0.3.0",
     "mdast-lint": "^0.4.0",
     "mdast-yaml-config": "^0.2.0",
@@ -56,7 +56,7 @@
     "make": "npm run lint && npm run test-coverage",
     "bundle": "browserify index.js --no-builtins -s mdastUtilToNLCST > mdast-util-to-nlcst.js",
     "postbundle": "esmangle mdast-util-to-nlcst.js > mdast-util-to-nlcst.min.js",
-    "build-md": "mdast . --output --quiet",
+    "build-md": "mdast . --quiet",
     "build": "npm run bundle && npm run build-md"
   }
 }
