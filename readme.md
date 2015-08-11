@@ -7,6 +7,10 @@ information intact.
 In plain English: this enables natural-language tooling to read markdown as
 input.
 
+> **Note** The interface is pretty rough. But in the future this will be built
+> into mdast/retext, something called “bridging”, so you won’t have to
+> use this library manually in the future :smile:!
+
 ## Installation
 
 [npm](https://docs.npmjs.com/cli/install):
@@ -36,7 +40,8 @@ var toNLCST = require('mdast-util-to-nlcst');
  */
 
 mdast.process('Some *foo*s-_ball_.', function (err, doc, file) {
-    var nlcst = toNLCST(file.namespace('mdast').ast, file);
+    toNLCST(file);
+    console.log(file.namespace('retext').cst);
     /*
      * Yields:
      *
@@ -190,21 +195,20 @@ mdast.process('Some *foo*s-_ball_.', function (err, doc, file) {
 
 ## API
 
-### toNLCST(ast, file\[, Parser | parser\])
+### toNLCST(file\[, Parser | parser\])
 
-Transform `ast` (the [**mdast**](https://github.com/wooorm/mdast) tree relating
-to `file`) into an [**nlcst**](https://github.com/wooorm/nlcst) node.
+Transform a by [**mdast**](https://github.com/wooorm/mdast) processed
+[**virtual file**](https://github.com/wooorm/vfile) into an file ready
+for processing by [**retext**](https://github.com/wooorm/retext).
 
 Parameters:
 
-*   `ast` (`Node`)
-    — [**mdast** node](https://github.com/wooorm/mdast/blob/master/doc/nodes.md);
-
 *   `file` (`File`)
-    — [Virtual file](https://github.com/wooorm/mdast/blob/master/doc/mdast.3.md#file).
+    — [Virtual file](https://github.com/wooorm/vfile), must be passed through
+    [`parse()`](https://github.com/wooorm/mdast/blob/master/doc/mdast.3.md#mdastparsefile-options).
 
 *   `parser` (`Function` or `Parser`, default: `new ParseLatin()`, optional)
-    — You can pass the (constructor of) an nlcst parser, such as
+    — You can pass the (constructor of) an NLCST parser, such as
     [**parse-english**](https://github.com/wooorm/parse-english) or
     [**parse-dutch**](https://github.com/wooorm/parse-dutch), the default is
     [**parse-latin**](https://github.com/wooorm/parse-latin).

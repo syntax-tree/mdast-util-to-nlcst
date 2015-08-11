@@ -213,25 +213,28 @@ one = function (node, index, parent, file, parser) {
 /**
  * Transform `ast` into `nlcst`.
  *
- * @param {MDASTNode} ast - Node.
  * @param {File} file - Virtual file.
  * @param {Function?} [Parser] - Constructor of an nlcst
  *   parser. Defaults to `ParseLatin`.
  * @return {NLCSTNode} - NLCST.
  */
-function toNLCST(ast, file, Parser) {
+function toNLCST(file, Parser) {
+    var ast;
     var parser;
+    var cst;
 
     /*
      * Warn for invalid parameters.
      */
 
-    if (!ast || !ast.type) {
-        throw new Error('mdast-util-to-nlcst expected node');
-    }
-
     if (!file || !file.messages) {
         throw new Error('mdast-util-to-nlcst expected file');
+    }
+
+    ast = file.namespace('mdast').ast;
+
+    if (!ast || !ast.type) {
+        throw new Error('mdast-util-to-nlcst expected node');
     }
 
     if (
@@ -261,16 +264,10 @@ function toNLCST(ast, file, Parser) {
     }
 
     /*
-     * Patch ranges when not given.
+     * Patch ranges.
      */
 
-    if (
-        !ast.position ||
-        !ast.position.start ||
-        isNaN(ast.position.start.offset)
-    ) {
-        range()(ast, file);
-    }
+    range()(ast, file);
 
     /*
      * Transform mdast into NLCST tokens, and pass these
@@ -278,7 +275,11 @@ function toNLCST(ast, file, Parser) {
      * where needed.
      */
 
-    return parser.parse(one(ast, null, null, file, parser));
+    cst = parser.parse(one(ast, null, null, file, parser));
+
+    file.namespace('retext').cst = cst;
+
+    return cst;
 }
 
 /*
