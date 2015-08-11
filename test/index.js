@@ -177,7 +177,7 @@ function describeFixture(fixture) {
         var output = read(join(filepath, 'output.json'), 'utf-8');
         var input = read(join(filepath, 'input.md'), 'utf-8');
 
-        mdast().process(input, function (err, doc, file) {
+        mdast().process(input, function (err, file) {
             var cst;
 
             done(err);
