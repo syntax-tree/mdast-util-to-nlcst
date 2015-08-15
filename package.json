@@ -34,7 +34,7 @@
     "istanbul": "^0.3.0",
     "jscs": "^2.0.0",
     "jscs-jsdoc": "^1.0.0",
-    "mdast": "^0.29.0",
+    "mdast": "^1.0.0",
     "mdast-comment-config": "^0.1.2",
     "mdast-github": "^0.3.0",
     "mdast-lint": "^0.4.0",
