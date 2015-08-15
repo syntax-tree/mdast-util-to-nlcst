@@ -2,6 +2,12 @@
 
 <!--lint disable no-multiple-toplevel-headings-->
 
+0.2.1 / 2015-08-15
+==================
+
+*   Fix mis-labeled dependencies ([2a81939](https://github.com/wooorm/mdast-util-to-nlcst/commit/2a81939))
+*   Update mdast ([d0939b8](https://github.com/wooorm/mdast-util-to-nlcst/commit/d0939b8))
+
 0.2.0 / 2015-08-11
 ==================
 
