@@ -11,9 +11,9 @@
     "language"
   ],
   "dependencies": {
-    "mdast-range": "^0.4.3",
-    "parse-latin": "^0.5.1",
-    "nlcst-to-string": "^0.1.5"
+    "mdast-range": "^1.0.0",
+    "parse-latin": "^2.0.0",
+    "nlcst-to-string": "^1.0.0"
   },
   "repository": {
     "type": "git",
@@ -35,14 +35,14 @@
     "jscs": "^2.0.0",
     "jscs-jsdoc": "^1.0.0",
     "mdast": "^1.0.0",
-    "mdast-comment-config": "^0.1.2",
-    "mdast-github": "^0.3.0",
-    "mdast-lint": "^0.4.0",
-    "mdast-slug": "^0.1.1",
-    "mdast-validate-links": "^0.3.1",
+    "mdast-comment-config": "^1.0.0",
+    "mdast-github": "^1.0.0",
+    "mdast-lint": "^1.0.0",
+    "mdast-slug": "^2.0.0",
+    "mdast-validate-links": "^1.0.0",
     "mocha": "^2.0.0",
-    "parse-dutch": "^0.5.0",
-    "parse-english": "^0.5.0",
+    "parse-dutch": "^2.0.0",
+    "parse-english": "^2.0.0",
     "vfile": "^1.0.0"
   },
   "scripts": {
