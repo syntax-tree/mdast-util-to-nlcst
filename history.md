@@ -2,6 +2,11 @@
 
 <!--lint disable no-multiple-toplevel-headings-->
 
+1.0.0 / 2015-09-18
+==================
+
+*   Refactor module ([0dd7eb9](https://github.com/wooorm/mdast-util-to-nlcst/commit/0dd7eb9))
+
 0.2.1 / 2015-08-15
 ==================
 

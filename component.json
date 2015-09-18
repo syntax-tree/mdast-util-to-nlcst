@@ -1,6 +1,6 @@
 {
   "name": "mdast-util-to-nlcst",
-  "version": "0.2.1",
+  "version": "1.0.0",
   "description": "Markdown to Natural Language",
   "license": "MIT",
   "keywords": [
