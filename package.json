@@ -12,7 +12,6 @@
   ],
   "dependencies": {
     "mdast-range": "^1.0.0",
-    "parse-latin": "^2.0.0",
     "nlcst-to-string": "^1.0.0"
   },
   "repository": {
@@ -43,6 +42,7 @@
     "mocha": "^2.0.0",
     "parse-dutch": "^2.0.0",
     "parse-english": "^2.0.0",
+    "parse-latin": "^2.0.0",
     "vfile": "^1.0.0"
   },
   "scripts": {

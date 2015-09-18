@@ -16,7 +16,6 @@
  */
 
 var range = require('mdast-range');
-var Latin = require('parse-latin');
 var toString = require('nlcst-to-string');
 
 /*
@@ -216,14 +215,14 @@ one = function (node, index, parent, file, parser) {
  * Transform `ast` into `nlcst`.
  *
  * @param {File} file - Virtual file.
- * @param {Function?} [Parser] - Constructor of an nlcst
- *   parser. Defaults to `ParseLatin`.
+ * @param {Parser|Function} Parser - (Instance of) NLCST
+ *   parser.
  * @return {NLCSTNode} - NLCST.
  */
 function toNLCST(file, Parser) {
     var ast;
+    var space;
     var parser;
-    var cst;
 
     /*
      * Warn for invalid parameters.
@@ -233,7 +232,8 @@ function toNLCST(file, Parser) {
         throw new Error('mdast-util-to-nlcst expected file');
     }
 
-    ast = file.namespace('mdast').ast;
+    space = file.namespace('mdast');
+    ast = space.tree || space.ast;
 
     if (!ast || !ast.type) {
         throw new Error('mdast-util-to-nlcst expected node');
@@ -253,17 +253,10 @@ function toNLCST(file, Parser) {
      */
 
     if (!Parser) {
-        Parser = Latin;
+        throw new Error('mdast-util-to-nlcst expected parser');
     }
 
-    if ('parse' in Parser) {
-        parser = Parser;
-        parser.position = true;
-    } else {
-        parser = new Parser({
-            'position': true
-        });
-    }
+    parser = 'parse' in Parser ? Parser : new Parser();
 
     /*
      * Patch ranges.
@@ -277,11 +270,7 @@ function toNLCST(file, Parser) {
      * where needed.
      */
 
-    cst = parser.parse(one(ast, null, null, file, parser));
-
-    file.namespace('retext').cst = cst;
-
-    return cst;
+    return parser.parse(one(ast, null, null, file, parser));
 }
 
 /*

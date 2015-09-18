@@ -195,11 +195,12 @@ mdast.process('Some *foo*s-_ball_.', function (err, doc, file) {
 
 ## API
 
-### toNLCST(file\[, Parser | parser\])
+### toNLCST(file, Parser | parser)
 
 Transform a by [**mdast**](https://github.com/wooorm/mdast) processed
-[**virtual file**](https://github.com/wooorm/vfile) into an file ready
-for processing by [**retext**](https://github.com/wooorm/retext).
+[**virtual file**](https://github.com/wooorm/vfile) into a
+[NLCST](https://github.com/wooorm/nlcst) tree for
+[**retext**](https://github.com/wooorm/retext).
 
 Parameters:
 
@@ -207,10 +208,10 @@ Parameters:
     — [Virtual file](https://github.com/wooorm/vfile), must be passed through
     [`parse()`](https://github.com/wooorm/mdast/blob/master/doc/mdast.3.md#mdastparsefile-options).
 
-*   `parser` (`Function` or `Parser`, default: `new ParseLatin()`, optional)
+*   `parser` (`Function` or `Parser`, optional)
     — You can pass the (constructor of) an NLCST parser, such as
-    [**parse-english**](https://github.com/wooorm/parse-english) or
-    [**parse-dutch**](https://github.com/wooorm/parse-dutch), the default is
+    [**parse-english**](https://github.com/wooorm/parse-english),
+    [**parse-dutch**](https://github.com/wooorm/parse-dutch), or
     [**parse-latin**](https://github.com/wooorm/parse-latin).
 
 Returns:

@@ -11,9 +11,8 @@
     "language"
   ],
   "dependencies": {
-    "wooorm/mdast-range": "^0.4.3",
-    "wooorm/parse-latin": "^0.5.1",
-    "wooorm/nlcst-to-string": "^0.1.5"
+    "wooorm/mdast-range": "^1.0.0",
+    "wooorm/nlcst-to-string": "^1.0.0"
   },
   "repository": "wooorm/mdast-util-to-nlcst",
   "scripts": [

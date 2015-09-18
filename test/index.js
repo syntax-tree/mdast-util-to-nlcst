@@ -11,6 +11,7 @@ var fs = require('fs');
 var path = require('path');
 var mdast = require('mdast');
 var VFile = require('vfile');
+var Latin = require('parse-latin');
 var Dutch = require('parse-dutch');
 var English = require('parse-english');
 var toNLCST = require('..');
@@ -37,9 +38,10 @@ var fixtures = fs.readdirSync(ROOT);
 /**
  * Helper to create a new file from a given cst.
  */
-function toFile(ast) {
+function toFile(tree) {
     var file = new VFile();
-    file.namespace('mdast').ast = ast;
+
+    file.namespace('mdast').tree = tree;
 
     return file;
 }
@@ -86,7 +88,7 @@ describe('mdast-util-to-nlcst', function () {
         }, /mdast-util-to-nlcst expected file/);
     });
 
-    it('should fail when not given a positional information', function () {
+    it('should fail when not given positional information', function () {
         assert.throws(function () {
             toNLCST(toFile({
                 'type': 'text',
@@ -122,13 +124,13 @@ describe('mdast-util-to-nlcst', function () {
             }
         };
 
-        toNLCST(toFile(node));
+        toNLCST(toFile(node), Latin);
 
         assert.equal(node.position.start.offset, 0);
         assert.equal(node.position.end.offset, 3);
     });
 
-    it('should accept an optional parser', function () {
+    it('should accept a parser', function () {
         var node = {
             'type': 'text',
             'value': 'foo',
@@ -144,9 +146,9 @@ describe('mdast-util-to-nlcst', function () {
             }
         };
 
-        assert.doesNotThrow(function () {
+        assert.throws(function () {
             toNLCST(toFile(node));
-        });
+        }, /mdast-util-to-nlcst expected parser/);
 
         assert.doesNotThrow(function () {
             toNLCST(toFile(node), English);
@@ -178,14 +180,8 @@ function describeFixture(fixture) {
         var input = read(join(filepath, 'input.md'), 'utf-8');
 
         mdast().process(input, function (err, file) {
-            var cst;
-
+            assert.deepEqual(toNLCST(file, Latin), JSON.parse(output));
             done(err);
-
-            cst = toNLCST(file);
-
-            assert.deepEqual(cst, JSON.parse(output));
-            assert.equal(cst, file.namespace('retext').cst);
         });
     });
 }
