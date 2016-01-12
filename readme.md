@@ -59,7 +59,7 @@ remark().process('Some *foo*s-_ball_.', function (err, file) {
 
 ## API
 
-### toNLCST(file, Parser | parser)
+### `toNLCST(file, Parser | parser)`
 
 Transform a by [**remark**][remark] processed
 [**virtual file**][vfile] into an
