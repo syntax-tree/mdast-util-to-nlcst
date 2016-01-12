@@ -1,14 +1,14 @@
 'use strict';
 
-/* eslint-env node, mocha */
+/* eslint-env node */
 
 /*
  * Dependencies.
  */
 
-var assert = require('assert');
 var fs = require('fs');
 var path = require('path');
+var test = require('tape');
 var remark = require('remark');
 var VFile = require('vfile');
 var Latin = require('parse-latin');
@@ -50,53 +50,76 @@ function toFile(tree) {
  * Tests.
  */
 
-describe('mdast-util-to-nlcst', function () {
-    it('should fail when not given a file', function () {
-        assert.throws(function () {
+test('mdast-util-to-nlcst', function (t) {
+    t.throws(
+        function () {
             toNLCST();
-        }, /mdast-util-to-nlcst expected file/);
+        },
+        /mdast-util-to-nlcst expected file/,
+        'should fail when not given a file'
+    );
 
-        assert.throws(function () {
+    t.throws(
+        function () {
             toNLCST({});
-        }, /mdast-util-to-nlcst expected file/);
-    });
+        },
+        /mdast-util-to-nlcst expected file/,
+        'should fail when not given a file (#2)'
+    );
 
-    it('should fail when not given an AST', function () {
-        assert.throws(function () {
+    t.throws(
+        function () {
             toNLCST(toFile());
-        }, /mdast-util-to-nlcst expected node/);
+        },
+        /mdast-util-to-nlcst expected node/,
+        'should fail when not given an AST'
+    );
 
-        assert.throws(function () {
+    t.throws(
+        function () {
             toNLCST(toFile({}));
-        }, /mdast-util-to-nlcst expected node/);
-    });
+        },
+        /mdast-util-to-nlcst expected node/,
+        'should fail when not given an AST (#2)'
+    );
 
-    it('should fail when not given a file', function () {
-        var node = {
-            'type': 'text',
-            'value': 'foo'
-        };
+    t.throws(
+        function () {
+            toNLCST({
+                'type': 'text',
+                'value': 'foo'
+            });
+        },
+        /mdast-util-to-nlcst expected file/,
+        'should fail when not given a file'
+    );
 
-        assert.throws(function () {
-            toNLCST(node);
-        }, /mdast-util-to-nlcst expected file/);
-
-        assert.throws(function () {
-            toNLCST(node, {
+    t.throws(
+        function () {
+            toNLCST({
+                'type': 'text',
+                'value': 'foo'
+            }, {
                 'foo': 'bar'
             });
-        }, /mdast-util-to-nlcst expected file/);
-    });
+        },
+        /mdast-util-to-nlcst expected file/,
+        'should fail when not given a file (#2)'
+    );
 
-    it('should fail when not given positional information', function () {
-        assert.throws(function () {
+    t.throws(
+        function () {
             toNLCST(toFile({
                 'type': 'text',
                 'value': 'foo'
             }));
-        }, /mdast-util-to-nlcst expected position on nodes/);
+        },
+        /mdast-util-to-nlcst expected position on nodes/,
+        'should fail when not given positional information'
+    );
 
-        assert.throws(function () {
+    t.throws(
+        function () {
             toNLCST(toFile({
                 'type': 'text',
                 'value': 'foo',
@@ -105,10 +128,12 @@ describe('mdast-util-to-nlcst', function () {
                     'end': {}
                 }
             }));
-        }, /mdast-util-to-nlcst expected position on nodes/);
-    });
+        },
+        /mdast-util-to-nlcst expected position on nodes/,
+        'should fail when not given positional information (#2)'
+    );
 
-    it('should accept nodes without offsets', function () {
+    t.test('should accept nodes without offsets', function (st) {
         var node = {
             'type': 'text',
             'value': 'foo',
@@ -126,11 +151,13 @@ describe('mdast-util-to-nlcst', function () {
 
         toNLCST(toFile(node), Latin);
 
-        assert.equal(node.position.start.offset, 0);
-        assert.equal(node.position.end.offset, 3);
+        st.equal(node.position.start.offset, 0);
+        st.equal(node.position.end.offset, 3);
+
+        st.end();
     });
 
-    it('should accept a parser', function () {
+    t.test('should accept a parser', function (st) {
         var node = {
             'type': 'text',
             'value': 'foo',
@@ -146,58 +173,54 @@ describe('mdast-util-to-nlcst', function () {
             }
         };
 
-        assert.throws(function () {
+        st.throws(function () {
             toNLCST(toFile(node));
         }, /mdast-util-to-nlcst expected parser/);
 
-        assert.doesNotThrow(function () {
+        st.doesNotThrow(function () {
             toNLCST(toFile(node), English);
         });
 
-        assert.doesNotThrow(function () {
+        st.doesNotThrow(function () {
             toNLCST(toFile(node), Dutch);
         });
 
-        assert.doesNotThrow(function () {
+        st.doesNotThrow(function () {
             toNLCST(toFile(node), new English());
         });
 
-        assert.doesNotThrow(function () {
+        st.doesNotThrow(function () {
             toNLCST(toFile(node), new Dutch());
         });
+
+        st.end();
     });
-});
-
-/**
- * Describe a fixture.
- *
- * @param {string} fixture - Name of fixture.
- */
-function describeFixture(fixture) {
-    it('should work on `' + fixture + '`', function (done) {
-        var filepath = join(ROOT, fixture);
-        var output = read(join(filepath, 'output.json'), 'utf-8');
-        var input = read(join(filepath, 'input.md'), 'utf-8');
-
-        remark().process(input, function (err, file) {
-            assert.deepEqual(toNLCST(file, Latin), JSON.parse(output));
-            done(err);
-        });
-    });
-}
-
-/*
- * Skip hidden files.
- */
-
-fixtures = fixtures.filter(function (filepath) {
-    return filepath.indexOf('.') !== 0;
 });
 
 /*
  * Assert fixtures.
  */
 
-describe('Fixtures', function () {
-    fixtures.forEach(describeFixture);
+test('Fixtures', function (t) {
+    fixtures
+        .filter(function (filepath) {
+            return filepath.indexOf('.') !== 0;
+        })
+        .forEach(function (fixture) {
+            var filepath = join(ROOT, fixture);
+            var output = read(join(filepath, 'output.json'), 'utf-8');
+            var input = read(join(filepath, 'input.md'), 'utf-8');
+
+            remark().process(input, function (err, file) {
+                t.ifError(err);
+
+                t.deepEqual(
+                    toNLCST(file, Latin),
+                    JSON.parse(output),
+                    'should work on `' + fixture + '`'
+                );
+            });
+        });
+
+    t.end();
 });
