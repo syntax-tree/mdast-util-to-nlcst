@@ -7,9 +7,8 @@ information intact.
 In plain English: this enables natural-language tooling to read markdown as
 input.
 
-> **Note** The interface is pretty rough. But in the future this will be built
-> into mdast/retext, something called “bridging”, so you won’t have to
-> use this library manually in the future :smile:!
+> **Note** You probably want to use
+> [remark-retext](https://github.com/wooorm/remark-retext).
 
 ## Installation
 
@@ -28,167 +27,34 @@ module, [uncompressed](mdast-util-to-nlcst.js) and
 ## Usage
 
 ```js
-/*
- * Dependencies.
- */
-
-var mdast = require('mdast');
 var toNLCST = require('mdast-util-to-nlcst');
+var inspect = require('unist-util-inspect');
+var remark = require('remark');
+var retext = require('retext');
 
 /*
  * Process.
  */
 
-mdast.process('Some *foo*s-_ball_.', function (err, doc, file) {
-    toNLCST(file);
-    console.log(file.namespace('retext').cst);
+remark().process('Some *foo*s-_ball_.', function (err, file) {
+    var tree = toNLCST(file, retext().Parser);
+
+    console.log(inspect(tree));
     /*
      * Yields:
      *
-     * Object
-     * ├─ type: "RootNode"
-     * ├─ position: Object
-     * |  └─ start: Object
-     * |  |  ├─ line: 1
-     * |  |  ├─ column: 1
-     * |  |  └─ offset: 0
-     * |  └─ end: Object
-     * |     ├─ line: 1
-     * |     ├─ column: 20
-     * |     └─ offset: 19
-     * └─ children: Array[1]
-     *    └─ 0: Object
-     *          ├─ type: "ParagraphNode"
-     *          ├─ position: Object
-     *          |  └─ start: Object
-     *          |  |  ├─ line: 1
-     *          |  |  ├─ column: 1
-     *          |  |  └─ offset: 0
-     *          |  └─ end: Object
-     *          |     ├─ line: 1
-     *          |     ├─ column: 20
-     *          |     └─ offset: 19
-     *          └─ children: Array[1]
-     *             └─ 0: Object
-     *                   ├─ type: "SentenceNode"
-     *                   ├─ position: Object
-     *                   |  └─ start: Object
-     *                   |  |  ├─ line: 1
-     *                   |  |  ├─ column: 1
-     *                   |  |  └─ offset: 0
-     *                   |  └─ end: Object
-     *                   |     ├─ line: 1
-     *                   |     ├─ column: 20
-     *                   |     └─ offset: 19
-     *                   └─ children: Array[4]
-     *                      ├─ 0: Object
-     *                      |     ├─ type: "WordNode"
-     *                      |     ├─ position: Object
-     *                      |     |  └─ start: Object
-     *                      |     |  |  ├─ line: 1
-     *                      |     |  |  ├─ column: 1
-     *                      |     |  |  └─ offset: 0
-     *                      |     |  └─ end: Object
-     *                      |     |     ├─ line: 1
-     *                      |     |     ├─ column: 5
-     *                      |     |     └─ offset: 4
-     *                      |     └─ children: Array[1]
-     *                      |        └─ 0: Object
-     *                      |              ├─ type: "TextNode"
-     *                      |              ├─ position: Object
-     *                      |              |  └─ start: Object
-     *                      |              |  |  ├─ line: 1
-     *                      |              |  |  ├─ column: 1
-     *                      |              |  |  └─ offset: 0
-     *                      |              |  └─ end: Object
-     *                      |              |     ├─ line: 1
-     *                      |              |     ├─ column: 5
-     *                      |              |     └─ offset: 4
-     *                      |              └─ value: "Some"
-     *                      ├─ 1: Object
-     *                      |     ├─ type: "WhiteSpaceNode"
-     *                      |     ├─ position: Object
-     *                      |     |  └─ start: Object
-     *                      |     |  |  ├─ line: 1
-     *                      |     |  |  ├─ column: 5
-     *                      |     |  |  └─ offset: 4
-     *                      |     |  └─ end: Object
-     *                      |     |     ├─ line: 1
-     *                      |     |     ├─ column: 6
-     *                      |     |     └─ offset: 5
-     *                      |     └─ value: " "
-     *                      ├─ 2: Object
-     *                      |     ├─ type: "WordNode"
-     *                      |     ├─ position: Object
-     *                      |     |  └─ start: Object
-     *                      |     |  |  ├─ line: 1
-     *                      |     |  |  ├─ column: 7
-     *                      |     |  |  └─ offset: 6
-     *                      |     |  └─ end: Object
-     *                      |     |     ├─ line: 1
-     *                      |     |     ├─ column: 18
-     *                      |     |     └─ offset: 17
-     *                      |     └─ children: Array[4]
-     *                      |        ├─ 0: Object
-     *                      |        |     ├─ type: "TextNode"
-     *                      |        |     ├─ position: Object
-     *                      |        |     |  └─ start: Object
-     *                      |        |     |  |  ├─ line: 1
-     *                      |        |     |  |  ├─ column: 7
-     *                      |        |     |  |  └─ offset: 6
-     *                      |        |     |  └─ end: Object
-     *                      |        |     |     ├─ line: 1
-     *                      |        |     |     ├─ column: 10
-     *                      |        |     |     └─ offset: 9
-     *                      |        |     └─ value: "foo"
-     *                      |        ├─ 1: Object
-     *                      |        |     ├─ type: "TextNode"
-     *                      |        |     ├─ position: Object
-     *                      |        |     |  └─ start: Object
-     *                      |        |     |  |  ├─ line: 1
-     *                      |        |     |  |  ├─ column: 11
-     *                      |        |     |  |  └─ offset: 10
-     *                      |        |     |  └─ end: Object
-     *                      |        |     |     ├─ line: 1
-     *                      |        |     |     ├─ column: 12
-     *                      |        |     |     └─ offset: 11
-     *                      |        |     └─ value: "s"
-     *                      |        ├─ 2: Object
-     *                      |        |     ├─ type: "PunctuationNode"
-     *                      |        |     ├─ position: Object
-     *                      |        |     |  └─ start: Object
-     *                      |        |     |  |  ├─ line: 1
-     *                      |        |     |  |  ├─ column: 12
-     *                      |        |     |  |  └─ offset: 11
-     *                      |        |     |  └─ end: Object
-     *                      |        |     |     ├─ line: 1
-     *                      |        |     |     ├─ column: 13
-     *                      |        |     |     └─ offset: 12
-     *                      |        |     └─ value: "-"
-     *                      |        └─ 3: Object
-     *                      |              ├─ type: "TextNode"
-     *                      |              ├─ position: Object
-     *                      |              |  └─ start: Object
-     *                      |              |  |  ├─ line: 1
-     *                      |              |  |  ├─ column: 14
-     *                      |              |  |  └─ offset: 13
-     *                      |              |  └─ end: Object
-     *                      |              |     ├─ line: 1
-     *                      |              |     ├─ column: 18
-     *                      |              |     └─ offset: 17
-     *                      |              └─ value: "ball"
-     *                      └─ 3: Object
-     *                            ├─ type: "PunctuationNode"
-     *                            ├─ position: Object
-     *                            |  └─ start: Object
-     *                            |  |  ├─ line: 1
-     *                            |  |  ├─ column: 19
-     *                            |  |  └─ offset: 18
-     *                            |  └─ end: Object
-     *                            |     ├─ line: 1
-     *                            |     ├─ column: 20
-     *                            |     └─ offset: 19
-     *                            └─ value: "."
+     * RootNode[1] (1:1-1:20, 0-19)
+     * └─ ParagraphNode[1] (1:1-1:20, 0-19)
+     *    └─ SentenceNode[4] (1:1-1:20, 0-19)
+     *       ├─ WordNode[1] (1:1-1:5, 0-4)
+     *       │  └─ TextNode: "Some" (1:1-1:5, 0-4)
+     *       ├─ WhiteSpaceNode: " " (1:5-1:6, 4-5)
+     *       ├─ WordNode[4] (1:7-1:18, 6-17)
+     *       │  ├─ TextNode: "foo" (1:7-1:10, 6-9)
+     *       │  ├─ TextNode: "s" (1:11-1:12, 10-11)
+     *       │  ├─ PunctuationNode: "-" (1:12-1:13, 11-12)
+     *       │  └─ TextNode: "ball" (1:14-1:18, 13-17)
+     *       └─ PunctuationNode: "." (1:19-1:20, 18-19)
      */
 });
 ```
@@ -197,8 +63,8 @@ mdast.process('Some *foo*s-_ball_.', function (err, doc, file) {
 
 ### toNLCST(file, Parser | parser)
 
-Transform a by [**mdast**](https://github.com/wooorm/mdast) processed
-[**virtual file**](https://github.com/wooorm/vfile) into a
+Transform a by [**remark**](https://github.com/wooorm/remark) processed
+[**virtual file**](https://github.com/wooorm/vfile) into an
 [NLCST](https://github.com/wooorm/nlcst) tree for
 [**retext**](https://github.com/wooorm/retext).
 
@@ -206,7 +72,7 @@ Parameters:
 
 *   `file` (`File`)
     — [Virtual file](https://github.com/wooorm/vfile), must be passed through
-    [`parse()`](https://github.com/wooorm/mdast/blob/master/doc/mdast.3.md#mdastparsefile-options).
+    [`parse()`](https://github.com/wooorm/remark/blob/master/doc/remark.3.md#remarkparsefile-options).
 
 *   `parser` (`Function` or `Parser`, optional)
     — You can pass the (constructor of) an NLCST parser, such as

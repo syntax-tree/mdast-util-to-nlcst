@@ -5,6 +5,7 @@
   "license": "MIT",
   "keywords": [
     "mdast",
+    "remark",
     "nlcst",
     "markdown",
     "natural",
@@ -33,16 +34,17 @@
     "istanbul": "^0.3.0",
     "jscs": "^2.0.0",
     "jscs-jsdoc": "^1.0.0",
-    "mdast": "^1.0.0",
-    "mdast-comment-config": "^1.0.0",
-    "mdast-github": "^1.0.0",
-    "mdast-lint": "^1.0.0",
-    "mdast-slug": "^2.0.0",
-    "mdast-validate-links": "^1.0.0",
     "mocha": "^2.0.0",
     "parse-dutch": "^2.0.0",
     "parse-english": "^2.0.0",
     "parse-latin": "^2.0.0",
+    "remark": "^3.0.0",
+    "remark-comment-config": "^2.0.0",
+    "remark-github": "^2.0.0",
+    "remark-lint": "^2.0.0",
+    "remark-slug": "^3.0.0",
+    "remark-validate-links": "^2.0.0",
+    "retext": "^1.0.0",
     "vfile": "^1.0.0"
   },
   "scripts": {
@@ -57,7 +59,7 @@
     "make": "npm run lint && npm run test-coverage",
     "bundle": "browserify index.js --no-builtins -s mdastUtilToNLCST > mdast-util-to-nlcst.js",
     "postbundle": "esmangle mdast-util-to-nlcst.js > mdast-util-to-nlcst.min.js",
-    "build-md": "mdast . --quiet",
+    "build-md": "remark . --quiet --frail",
     "build": "npm run bundle && npm run build-md"
   }
 }

@@ -9,7 +9,7 @@
 var assert = require('assert');
 var fs = require('fs');
 var path = require('path');
-var mdast = require('mdast');
+var remark = require('remark');
 var VFile = require('vfile');
 var Latin = require('parse-latin');
 var Dutch = require('parse-dutch');
@@ -179,7 +179,7 @@ function describeFixture(fixture) {
         var output = read(join(filepath, 'output.json'), 'utf-8');
         var input = read(join(filepath, 'input.md'), 'utf-8');
 
-        mdast().process(input, function (err, file) {
+        remark().process(input, function (err, file) {
             assert.deepEqual(toNLCST(file, Latin), JSON.parse(output));
             done(err);
         });
