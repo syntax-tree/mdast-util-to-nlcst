@@ -49,9 +49,7 @@
   },
   "scripts": {
     "test-api": "node test/index.js",
-    "test-coveralls": "istanbul cover --report lcovonly test/index.js",
     "test-coverage": "istanbul cover test/index.js",
-    "test-travis": "npm run test-coveralls",
     "test": "npm run test-api",
     "lint-api": "eslint .",
     "lint-style": "jscs --reporter inline .",
