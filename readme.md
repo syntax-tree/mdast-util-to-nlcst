@@ -18,7 +18,7 @@ input.
 npm install mdast-util-to-nlcst
 ```
 
-**mdast-util-to-nlcst** is also available for [bower](http://bower.io/#install-packages),
+**mdast-util-to-nlcst** is also available for
 [component](https://github.com/componentjs/component), and
 [duo](http://duojs.org/#getting-started), and as an AMD, CommonJS, and globals
 module, [uncompressed](mdast-util-to-nlcst.js) and
