@@ -48,16 +48,15 @@
     "vfile": "^1.0.0"
   },
   "scripts": {
-    "test-api": "node test/index.js",
-    "test-coverage": "istanbul cover test/index.js",
-    "test": "npm run test-api",
+    "build-bundle": "browserify index.js --no-builtins -s mdastUtilToNLCST > mdast-util-to-nlcst.js",
+    "build-mangle": "esmangle mdast-util-to-nlcst.js > mdast-util-to-nlcst.min.js",
+    "build-md": "remark . --quiet --frail",
+    "build": "npm run build-md && npm run build-bundle && npm run build-mangle",
     "lint-api": "eslint .",
     "lint-style": "jscs --reporter inline .",
     "lint": "npm run lint-api && npm run lint-style",
-    "make": "npm run lint && npm run test-coverage",
-    "bundle": "browserify index.js --no-builtins -s mdastUtilToNLCST > mdast-util-to-nlcst.js",
-    "postbundle": "esmangle mdast-util-to-nlcst.js > mdast-util-to-nlcst.min.js",
-    "build-md": "remark . --quiet --frail",
-    "build": "npm run bundle && npm run build-md"
+    "test-api": "node test/index.js",
+    "test-coverage": "istanbul cover test/index.js",
+    "test": "npm run build && npm run lint && npm run test-coverage"
   }
 }
