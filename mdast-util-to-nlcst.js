@@ -16,7 +16,7 @@
  * Dependencies.
  */
 
-var range = require('mdast-range');
+var range = require('remark-range');
 var toString = require('nlcst-to-string');
 
 /*
@@ -280,12 +280,71 @@ function toNLCST(file, Parser) {
 
 module.exports = toNLCST;
 
-},{"mdast-range":2,"nlcst-to-string":3}],2:[function(require,module,exports){
+},{"nlcst-to-string":2,"remark-range":3}],2:[function(require,module,exports){
+/**
+ * @author Titus Wormer
+ * @copyright 2014-2015 Titus Wormer
+ * @license MIT
+ * @module nlcst:to-string
+ * @fileoverview Transform an NLCST node into a string.
+ */
+
+'use strict';
+
+/* eslint-env commonjs */
+
+/**
+ * Stringify an NLCST node.
+ *
+ * @param {NLCSTNode|Array.<NLCSTNode>} node - Node to to
+ *   stringify.
+ * @param {string} separator - Value to separate each item
+ *   with.
+ * @return {string} - Stringified `node`.
+ */
+function nlcstToString(node, separator) {
+    var values;
+    var length;
+    var children;
+
+    separator = separator || '';
+
+    if (typeof node.value === 'string') {
+        return node.value;
+    }
+
+    children = 'length' in node ? node : node.children;
+    length = children.length;
+
+    /*
+     * Shortcut: This is pretty common, and a small performance win.
+     */
+
+    if (length === 1 && 'value' in children[0]) {
+        return children[0].value;
+    }
+
+    values = [];
+
+    while (length--) {
+        values[length] = nlcstToString(children[length], separator);
+    }
+
+    return values.join(separator);
+}
+
+/*
+ * Expose.
+ */
+
+module.exports = nlcstToString;
+
+},{}],3:[function(require,module,exports){
 /**
  * @author Titus Wormer
  * @copyright 2015 Titus Wormer
  * @license MIT
- * @module mdast:range
+ * @module remark:range
  * @fileoverview Patch index-based range on mdast nodes.
  */
 
@@ -303,7 +362,7 @@ var visit = require('unist-util-visit');
  * Calculate offsets for `lines`.
  *
  * @param {Array.<string>} lines - Lines to compile.
- * @return {Array.<number>}
+ * @return {Array.<number>} - List of offsets per line.
  */
 function toOffsets(lines) {
     var total = 0;
@@ -322,6 +381,7 @@ function toOffsets(lines) {
  * Add an offset based on `offsets` to `position`.
  *
  * @param {Object} position - Position.
+ * @param {Function} fn - Calculator.
  */
 function addRange(position, fn) {
     position.offset = fn(position);
@@ -411,7 +471,7 @@ function transformer(ast, file) {
      */
 
     if (!file || typeof file.contents !== 'string') {
-        throw new Error('Missing `file` for mdast-range');
+        throw new Error('Missing `file` for remark-range');
     }
 
     /*
@@ -460,66 +520,7 @@ function attacher() {
 
 module.exports = attacher;
 
-},{"unist-util-visit":4}],3:[function(require,module,exports){
-/**
- * @author Titus Wormer
- * @copyright 2014-2015 Titus Wormer
- * @license MIT
- * @module nlcst:to-string
- * @fileoverview Transform an NLCST node into a string.
- */
-
-'use strict';
-
-/* eslint-env commonjs */
-
-/**
- * Stringify an NLCST node.
- *
- * @param {NLCSTNode|Array.<NLCSTNode>} node - Node to to
- *   stringify.
- * @param {string} separator - Value to separate each item
- *   with.
- * @return {string} - Stringified `node`.
- */
-function nlcstToString(node, separator) {
-    var values;
-    var length;
-    var children;
-
-    separator = separator || '';
-
-    if (typeof node.value === 'string') {
-        return node.value;
-    }
-
-    children = 'length' in node ? node : node.children;
-    length = children.length;
-
-    /*
-     * Shortcut: This is pretty common, and a small performance win.
-     */
-
-    if (length === 1 && 'value' in children[0]) {
-        return children[0].value;
-    }
-
-    values = [];
-
-    while (length--) {
-        values[length] = nlcstToString(children[length], separator);
-    }
-
-    return values.join(separator);
-}
-
-/*
- * Expose.
- */
-
-module.exports = nlcstToString;
-
-},{}],4:[function(require,module,exports){
+},{"unist-util-visit":4}],4:[function(require,module,exports){
 /**
  * @author Titus Wormer
  * @copyright 2015 Titus Wormer. All rights reserved.

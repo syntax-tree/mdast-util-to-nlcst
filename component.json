@@ -12,7 +12,7 @@
     "language"
   ],
   "dependencies": {
-    "wooorm/mdast-range": "^1.0.0",
+    "wooorm/remark-range": "^2.0.0",
     "wooorm/nlcst-to-string": "^1.0.0"
   },
   "repository": "wooorm/mdast-util-to-nlcst",

@@ -15,7 +15,7 @@
  * Dependencies.
  */
 
-var range = require('mdast-range');
+var range = require('remark-range');
 var toString = require('nlcst-to-string');
 
 /*
