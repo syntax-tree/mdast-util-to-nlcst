@@ -21,12 +21,10 @@
     ".*",
     "*.log",
     "*.md",
-    "build/",
     "components/",
     "coverage/",
     "node_modules/",
     "test/",
-    "build.js",
     "index.js",
     "component.json",
     "package.json"

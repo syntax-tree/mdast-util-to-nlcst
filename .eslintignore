@@ -1,6 +1,4 @@
-build/
 components/
 coverage/
-build.js
 mdast-util-to-nlcst.js
 mdast-util-to-nlcst.min.js
