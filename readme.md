@@ -19,8 +19,7 @@ npm install mdast-util-to-nlcst
 ```
 
 **mdast-util-to-nlcst** is also available for [duo](http://duojs.org/#getting-started),
-and as an AMD, CommonJS, and globals module, [uncompressed](mdast-util-to-nlcst.js)
-and [compressed](mdast-util-to-nlcst.min.js).
+and as an AMD, CommonJS, and globals module, [uncompressed and compressed](https://github.com/wooorm/mdast-util-to-nlcst/releases).
 
 ## Usage
 
