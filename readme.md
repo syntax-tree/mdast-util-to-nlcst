@@ -1,25 +1,26 @@
-# mdast-util-to-nlcst [![Build Status](https://img.shields.io/travis/wooorm/mdast-util-to-nlcst.svg)](https://travis-ci.org/wooorm/mdast-util-to-nlcst) [![Coverage Status](https://img.shields.io/codecov/c/github/wooorm/mdast-util-to-nlcst.svg)](https://codecov.io/github/wooorm/mdast-util-to-nlcst)
+# mdast-util-to-nlcst [![Build Status][travis-badge]][travis] [![Coverage Status][coverage-badge]][coverage]
 
-[**mdast**](https://github.com/wooorm/mdast) utility to transform markdown
-into [**nlcst**](https://github.com/wooorm/nlcst), while keeping location
+[**mdast**][mdast] utility to transform markdown
+into [**nlcst**][nlcst], while keeping location
 information intact.
 
 In plain English: this enables natural-language tooling to read markdown as
 input.
 
 > **Note** You probably want to use
-> [remark-retext](https://github.com/wooorm/remark-retext).
+> [remark-retext][].
 
 ## Installation
 
-[npm](https://docs.npmjs.com/cli/install):
+[npm][npm-install]:
 
 ```bash
 npm install mdast-util-to-nlcst
 ```
 
-**mdast-util-to-nlcst** is also available for [duo](http://duojs.org/#getting-started),
-and as an AMD, CommonJS, and globals module, [uncompressed and compressed](https://github.com/wooorm/mdast-util-to-nlcst/releases).
+**mdast-util-to-nlcst** is also available for [duo][],
+and as an AMD, CommonJS, and globals module,
+[uncompressed and compressed][releases].
 
 ## Usage
 
@@ -60,27 +61,68 @@ remark().process('Some *foo*s-_ball_.', function (err, file) {
 
 ### toNLCST(file, Parser | parser)
 
-Transform a by [**remark**](https://github.com/wooorm/remark) processed
-[**virtual file**](https://github.com/wooorm/vfile) into an
-[NLCST](https://github.com/wooorm/nlcst) tree for
-[**retext**](https://github.com/wooorm/retext).
+Transform a by [**remark**][remark] processed
+[**virtual file**][vfile] into an
+[NLCST][nlcst] tree for
+[**retext**][retext].
 
 Parameters:
 
 *   `file` (`File`)
-    — [Virtual file](https://github.com/wooorm/vfile), must be passed through
-    [`parse()`](https://github.com/wooorm/remark/blob/master/doc/remark.3.md#remarkparsefile-options).
+    — [Virtual file][vfile], must be passed through
+    [`parse()`][remark-parse].
 
 *   `parser` (`Function` or `Parser`, optional)
     — You can pass the (constructor of) an NLCST parser, such as
-    [**parse-english**](https://github.com/wooorm/parse-english),
-    [**parse-dutch**](https://github.com/wooorm/parse-dutch), or
-    [**parse-latin**](https://github.com/wooorm/parse-latin).
+    [**parse-english**][parse-english], [**parse-dutch**][parse-dutch],
+    or [**parse-latin**][parse-latin].
 
 Returns:
 
-[`NLCSTNode`](https://github.com/wooorm/nlcst).
+[`NLCSTNode`][nlcst-node].
 
 ## License
 
-[MIT](LICENSE) © [Titus Wormer](http://wooorm.com)
+[MIT][license] © [Titus Wormer][home]
+
+<!-- Definitions -->
+
+[travis-badge]: https://img.shields.io/travis/wooorm/mdast-util-to-nlcst.svg
+
+[travis]: https://travis-ci.org/wooorm/mdast-util-to-nlcst
+
+[coverage-badge]: https://img.shields.io/codecov/c/github/wooorm/mdast-util-to-nlcst.svg
+
+[coverage]: https://codecov.io/github/wooorm/mdast-util-to-nlcst
+
+[vfile]: https://github.com/wooorm/vfile
+
+[remark]: https://github.com/wooorm/remark
+
+[retext]: https://github.com/wooorm/retext
+
+[mdast]: https://github.com/wooorm/mdast
+
+[nlcst]: https://github.com/wooorm/nlcst
+
+[remark-retext]: https://github.com/wooorm/remark-retext
+
+[npm-install]: https://docs.npmjs.com/cli/install
+
+[duo]: http://duojs.org/#getting-started
+
+[releases]: https://github.com/wooorm/mdast-util-to-nlcst/releases
+
+[remark-parse]: https://github.com/wooorm/remark/blob/master/doc/remark.3.md#remarkparsefile-options
+
+[nlcst-node]: https://github.com/wooorm/nlcst
+
+[parse-english]: https://github.com/wooorm/parse-english
+
+[parse-dutch]: https://github.com/wooorm/parse-dutch
+
+[parse-latin]: https://github.com/wooorm/parse-latin
+
+[license]: LICENSE
+
+[home]: http://wooorm.com
