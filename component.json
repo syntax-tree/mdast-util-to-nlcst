@@ -13,6 +13,7 @@
   ],
   "dependencies": {
     "wooorm/remark-range": "^2.0.0",
+    "jonschlinkert/repeat-string": "^1.5.2",
     "wooorm/nlcst-to-string": "^1.0.0"
   },
   "repository": "wooorm/mdast-util-to-nlcst",

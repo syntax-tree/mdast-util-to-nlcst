@@ -8,8 +8,8 @@ Rules:
 
 Tables:
 
-| Foo |
-| --- |
-| Bar |
+| Foo | Bar |
+| --- | --- |
+| Baz | Qux |
 
 ...that’s all, for now 😄.

@@ -17,6 +17,7 @@
 
 var range = require('remark-range');
 var toString = require('nlcst-to-string');
+var repeat = require('repeat-string');
 
 /*
  * Map of ignored mdast nodes: nodes which have no (simple)
@@ -34,7 +35,7 @@ var IGNORE = {
  * Constants.
  */
 
-var NON_NEWLINE = /[^\n]/;
+var C_NEWLINE = '\n';
 
 /**
  * Create an position object for `offset` in `file`.
@@ -129,13 +130,39 @@ all = function (parent, file, parser) {
     var index = -1;
     var result = [];
     var child;
+    var node;
+    var pos;
+    var prevEndLine;
+    var prevOffset;
+    var endLine;
 
     while (++index < length) {
-        child = one(children[index], index, parent, file, parser);
+        node = children[index];
+        pos = node.position;
+        endLine = pos.start.line;
+
+        if (prevEndLine && endLine !== prevEndLine) {
+            child = parser.tokenizeWhiteSpace(
+                repeat(C_NEWLINE, endLine - prevEndLine)
+            );
+
+            patch([child], file, prevOffset);
+
+            if (child.value.length < 2) {
+                child.value = repeat(C_NEWLINE, 2);
+            }
+
+            result.push(child);
+        }
+
+        child = one(node, index, parent, file, parser);
 
         if (child) {
             result = result.concat(child);
         }
+
+        prevEndLine = pos.end.line;
+        prevOffset = pos.end.offset;
     }
 
     return result;
@@ -154,17 +181,10 @@ all = function (parent, file, parser) {
  */
 one = function (node, index, parent, file, parser) {
     var type = node.type;
-    var siblings = parent && parent.children;
-    var prev = siblings && siblings[index - 1];
     var pos = node.position;
     var start = pos.start;
     var end = pos.end;
-    var final = prev && prev.position.end.offset;
     var replacement;
-    var result;
-    var space;
-
-    space = final && file.toString().slice(final, start.offset);
 
     if (type in IGNORE) {
         return null;
@@ -192,20 +212,6 @@ one = function (node, index, parent, file, parser) {
         replacement = patch([parser.tokenizeSource(
             file.toString().slice(start.offset, end.offset)
         )], file, start.offset);
-    }
-
-    /**
-     * There’s a difference between block-nodes with
-     * lines between them. NLCST parsers need them to
-     * differentiate between paragraphs.
-     */
-
-    if (replacement && space && !NON_NEWLINE.test(space)) {
-        result = parser.tokenizeWhiteSpace(space);
-
-        patch([result], file, final);
-
-        replacement.unshift(result);
     }
 
     return replacement || null;

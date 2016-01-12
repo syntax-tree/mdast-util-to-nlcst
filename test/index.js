@@ -212,7 +212,7 @@ test('Fixtures', function (t) {
             var input = read(join(filepath, 'input.md'), 'utf-8');
 
             remark().process(input, function (err, file) {
-                t.ifError(err);
+                t.ifError(err, 'shouldn’t fail');
 
                 t.deepEqual(
                     toNLCST(file, Latin),
