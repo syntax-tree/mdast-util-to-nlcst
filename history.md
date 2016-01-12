@@ -2,6 +2,11 @@
 
 <!--lint disable no-multiple-toplevel-headings-->
 
+2.0.1 / 2016-01-12
+==================
+
+*   Fix deploy script ([84fcdc7](https://github.com/wooorm/mdast-util-to-nlcst/commit/84fcdc7))
+
 2.0.0 / 2016-01-12
 ==================
 
