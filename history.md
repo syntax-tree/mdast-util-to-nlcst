@@ -2,6 +2,11 @@
 
 <!--lint disable no-multiple-toplevel-headings-->
 
+3.0.0 / 2016-06-22
+==================
+
+*   Refactor module for changes in remark, retext ([`7d88f57`](https://github.com/wooorm/mdast-util-to-nlcst/commit/7d88f57))
+
 2.0.1 / 2016-01-12
 ==================
 
