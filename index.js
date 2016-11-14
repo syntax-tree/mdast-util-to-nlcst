@@ -1,11 +1,3 @@
-/**
- * @author Titus Wormer
- * @copyright 2015 Titus Wormer
- * @license MIT
- * @module mdast:to-nlcst
- * @fileoverview Transform MDAST to NLCST.
- */
-
 'use strict';
 
 /* Dependencies. */
@@ -28,15 +20,7 @@ var IGNORE = {
 /* Constants. */
 var C_NEWLINE = '\n';
 
-/**
- * Transform `ast` into `nlcst`.
- *
- * @param {Node} tree - MDAST node.
- * @param {File} file - Virtual file.
- * @param {Parser|Function} Parser - (Instance of) NLCST
- *   parser.
- * @return {NLCSTNode} - NLCST.
- */
+/* Transform `tree` into `nlcst`. */
 function toNLCST(tree, file, Parser) {
   var parser;
   var location;
@@ -74,18 +58,7 @@ function toNLCST(tree, file, Parser) {
   return parser.parse(one(tree, null, null, file, location, parser));
 }
 
-/**
- * Convert `node` into NLCST.
- *
- * @param {MDASTNode} node - Node.
- * @param {number?} index - Position of `node` in `parent`.
- * @param {MDASTNode?} parent - Parent node of `node`.
- * @param {File} file - Virtual file.
- * @param {Object} location - Bound location info.
- * @param {Parser} parser - NLCST parser.
- * @return {Array.<NLCSTNode>?} - A list of NLCST nodes, if
- *   `node` could be converted.
- */
+/* Convert `node` into NLCST. */
 function one(node, index, parent, file, location, parser) {
   var type = node.type;
   var pos = node.position;
@@ -126,16 +99,7 @@ function one(node, index, parent, file, location, parser) {
   return replacement || null;
 }
 
-/**
- * Convert all nodes in `parent` (mdast) into NLCST.
- *
- * @param {MDASTNode} parent - Parent node.
- * @param {File} file - Virtual file.
- * @param {Object} location - Bound location info.
- * @param {Parser} parser - NLCST parser.
- * @return {Array.<NLCSTNode>} - Concatenation of calling
- *   `one` on each MDASTNode in `parent`.
- */
+/* Convert all nodes in `parent` (mdast) into NLCST. */
 function all(parent, file, location, parser) {
   var children = parent.children;
   var length = children && children.length;
@@ -180,20 +144,9 @@ function all(parent, file, location, parser) {
   return result;
 }
 
-/**
- * Patch a position on each node in `nodes`.
+/* Patch a position on each node in `nodes`.
  * `offset` is the offset in `file` this run of content
- * starts at.
- *
- * Note that NLCST nodes are concrete, meaning that their
- * starting and ending positions can be inferred from their
- * content.
- *
- * @param {Array.<NLCSTNode>} nodes - NLCST nodes.
- * @param {Object} location - Bound location info.
- * @param {number} offset - Starting offset for `nodes`.
- * @return {Array.<NLCSTNode>} - `nodes`.
- */
+ * starts at. */
 function patch(nodes, location, offset) {
   var length = nodes.length;
   var index = -1;
