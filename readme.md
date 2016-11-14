@@ -1,14 +1,12 @@
 # mdast-util-to-nlcst [![Build Status][travis-badge]][travis] [![Coverage Status][codecov-badge]][codecov]
 
-<!--lint disable heading-increment list-item-spacing-->
-
 Transform [MDAST][] to [NLCST][].
 
 > **Note** You probably want to use [remark-retext][].
 
 ## Installation
 
-[npm][npm-install]:
+[npm][]:
 
 ```bash
 npm install mdast-util-to-nlcst
@@ -24,22 +22,16 @@ var inspect = require('unist-util-inspect');
 var English = require('parse-english');
 var remark = require('remark');
 var vfile = require('vfile');
-```
 
-Process:
-
-```javascript
 var file = vfile('Some *foo*sball.');
 var tree = remark().parse(file);
-```
 
-Stringify:
-
-```javascript
 var nlcst = toNLCST(tree, file, English);
+
+console.log(inspect(nlcst));
 ```
 
-Which, when inspecting, yields:
+Yields:
 
 ```txt
 RootNode[1] (1:1-1:17, 0-16)
@@ -89,7 +81,7 @@ into an [NLCST][nlcst] tree.
 
 [codecov]: https://codecov.io/github/wooorm/mdast-util-to-nlcst
 
-[npm-install]: https://docs.npmjs.com/cli/install
+[npm]: https://docs.npmjs.com/cli/install
 
 [license]: LICENSE
 
