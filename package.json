@@ -27,7 +27,7 @@
     "vfile-location": "^2.0.0"
   },
   "devDependencies": {
-    "browserify": "^13.0.1",
+    "browserify": "^14.0.0",
     "esmangle": "^1.0.1",
     "is-hidden": "^1.0.1",
     "negate": "^1.0.0",
