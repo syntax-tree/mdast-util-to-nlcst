@@ -73,13 +73,13 @@ into an [NLCST][nlcst] tree.
 
 <!-- Definitions -->
 
-[travis-badge]: https://img.shields.io/travis/wooorm/mdast-util-to-nlcst.svg
+[travis-badge]: https://img.shields.io/travis/syntax-tree/mdast-util-to-nlcst.svg
 
-[travis]: https://travis-ci.org/wooorm/mdast-util-to-nlcst
+[travis]: https://travis-ci.org/syntax-tree/mdast-util-to-nlcst
 
-[codecov-badge]: https://img.shields.io/codecov/c/github/wooorm/mdast-util-to-nlcst.svg
+[codecov-badge]: https://img.shields.io/codecov/c/github/syntax-tree/mdast-util-to-nlcst.svg
 
-[codecov]: https://codecov.io/github/wooorm/mdast-util-to-nlcst
+[codecov]: https://codecov.io/github/syntax-tree/mdast-util-to-nlcst
 
 [npm]: https://docs.npmjs.com/cli/install
 
@@ -87,13 +87,13 @@ into an [NLCST][nlcst] tree.
 
 [author]: http://wooorm.com
 
-[mdast]: https://github.com/wooorm/mdast
+[mdast]: https://github.com/syntax-tree/mdast
 
-[nlcst]: https://github.com/wooorm/nlcst
+[nlcst]: https://github.com/syntax-tree/nlcst
 
 [remark-retext]: https://github.com/wooorm/remark-retext
 
-[vfile]: https://github.com/wooorm/vfile
+[vfile]: https://github.com/vfile/vfile
 
 [english]: https://github.com/wooorm/parse-english
 
