@@ -3,6 +3,7 @@
 /* Dependencies. */
 var repeat = require('repeat-string');
 var vfileLocation = require('vfile-location');
+var position = require('unist-util-position');
 var toString = require('nlcst-to-string');
 
 /* Expose. */
@@ -61,9 +62,9 @@ function toNLCST(tree, file, Parser) {
 /* Convert `node` into NLCST. */
 function one(node, index, parent, file, location, parser) {
   var type = node.type;
-  var pos = node.position;
-  var start = location.toOffset(pos.start);
-  var end = location.toOffset(pos.end);
+  var doc = String(file);
+  var start = location.toOffset(position.start(node));
+  var end = location.toOffset(position.end(node));
   var replacement;
 
   if (type in IGNORE) {
@@ -76,24 +77,16 @@ function one(node, index, parent, file, location, parser) {
     type === 'image' ||
     type === 'imageReference'
   ) {
-    replacement = patch(
-      parser.tokenize(node.alt), location, start + 2
-    );
+    replacement = patch(parser.tokenize(node.alt), location, start + 2);
   } else if (
     type === 'text' ||
     type === 'escape'
   ) {
-    replacement = patch(
-      parser.tokenize(node.value), location, start
-    );
+    replacement = patch(parser.tokenize(node.value), location, start);
   } else if (node.type === 'break') {
-    replacement = patch([
-      parser.tokenizeWhiteSpace('\n')
-    ], location, start);
+    replacement = patch([parser.tokenizeWhiteSpace('\n')], location, start);
   } else if (node.type === 'inlineCode') {
-    replacement = patch([parser.tokenizeSource(
-      file.toString().slice(start, end)
-    )], location, start);
+    replacement = patch([parser.tokenizeSource(doc.slice(start, end))], location, start);
   }
 
   return replacement || null;
@@ -115,7 +108,7 @@ function all(parent, file, location, parser) {
   while (++index < length) {
     node = children[index];
     pos = node.position;
-    endLine = pos.start.line;
+    endLine = position.start(node).line;
 
     if (prevEndLine && endLine !== prevEndLine) {
       child = parser.tokenizeWhiteSpace(
@@ -137,8 +130,9 @@ function all(parent, file, location, parser) {
       result = result.concat(child);
     }
 
-    prevEndLine = pos.end.line;
-    prevOffset = pos.end.offset;
+    pos = position.end(node);
+    prevEndLine = pos.line;
+    prevOffset = pos.offset;
   }
 
   return result;

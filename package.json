@@ -24,6 +24,7 @@
   "dependencies": {
     "nlcst-to-string": "^2.0.0",
     "repeat-string": "^1.5.2",
+    "unist-util-position": "^3.0.0",
     "vfile-location": "^2.0.0"
   },
   "devDependencies": {
