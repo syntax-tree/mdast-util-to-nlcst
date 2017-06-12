@@ -2,7 +2,7 @@
 
 Transform [MDAST][] to [NLCST][].
 
-> **Note** You probably want to use [remark-retext][].
+> **Note** You probably want to use [`remark-retext`][remark-retext].
 
 ## Installation
 
@@ -63,6 +63,17 @@ into an [NLCST][nlcst] tree.
 ###### Returns
 
 [`NLCSTNode`][nlcst].
+
+## Related
+
+*   [`remark-retext`][remark-retext]
+    — **retext** support for **remark**
+*   [`hast-util-to-nlcst`](https://github.com/syntax-tree/hast-util-to-nlcst)
+    — Transform HAST to NLCST
+*   [`hast-util-to-mdast`](https://github.com/syntax-tree/hast-util-to-mdast)
+    — Transform HAST to MDAST
+*   [`mdast-util-to-hast`](https://github.com/syntax-tree/mdast-util-to-hast)
+    — Transform MDAST to HAST
 
 ## License
 
