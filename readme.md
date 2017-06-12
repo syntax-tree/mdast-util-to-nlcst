@@ -53,13 +53,12 @@ into an [NLCST][nlcst] tree.
 
 ###### Parameters
 
-*   `node` ([`MDASTNode`][mdast]) — Syntax tree (with positional
-    information);
-*   `file` ([`VFile`][vfile]);
+*   `node` ([`MDASTNode`][mdast])
+    — Syntax tree (with positional information)
+*   `file` ([`VFile`][vfile])
 *   `parser` (`Function`)
-    — Constructor of an NLCST parser, such as
-    [**parse-english**][english], [**parse-dutch**][dutch],
-    or [**parse-latin**][latin].
+    — Constructor of an NLCST parser, such as [**parse-english**][english],
+    [**parse-dutch**][dutch], or [**parse-latin**][latin]
 
 ###### Returns
 
