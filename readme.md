@@ -14,8 +14,6 @@ npm install mdast-util-to-nlcst
 
 ## Usage
 
-Dependencies:
-
 ```javascript
 var toNLCST = require('mdast-util-to-nlcst');
 var inspect = require('unist-util-inspect');
