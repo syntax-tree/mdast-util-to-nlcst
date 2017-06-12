@@ -126,7 +126,7 @@
               "children": [
                 {
                   "type": "TextNode",
-                  "value": "strongness",
+                  "value": "importance",
                   "position": {
                     "start": {
                       "line": 1,

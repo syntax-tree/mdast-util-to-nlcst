@@ -1,1 +1,1 @@
-Some *emphasis*, **strongness**, and `code`.
+Some _emphasis_, **importance**, and `code`.
