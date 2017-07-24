@@ -4,6 +4,7 @@ var fs = require('fs');
 var path = require('path');
 var test = require('tape');
 var remark = require('remark');
+var frontmatter = require('remark-frontmatter');
 var vfile = require('vfile');
 var Latin = require('parse-latin');
 var Dutch = require('parse-dutch');
@@ -150,7 +151,7 @@ test('Fixtures', function (t) {
       var input = read(join(filepath, 'input.md'), 'utf-8');
 
       t.deepEqual(
-        toNLCST(remark().parse(input), vfile(input), Latin),
+        toNLCST(remark().use(frontmatter).parse(input), vfile(input), Latin),
         JSON.parse(output),
         'should work on `' + fixture + '`'
       );
