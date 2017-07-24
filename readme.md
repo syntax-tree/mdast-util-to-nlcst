@@ -51,16 +51,19 @@ RootNode[1] (1:1-1:17, 0-16)
 Transform an [MDAST][] syntax tree and corresponding [virtual file][vfile]
 into an [NLCST][nlcst] tree.
 
-###### Parameters
+##### Parameters
 
 *   `node` ([`MDASTNode`][mdast])
     — Syntax tree (with positional information)
 *   `file` ([`VFile`][vfile])
-*   `parser` (`Function`)
-    — Constructor of an NLCST parser, such as [**parse-english**][english],
-    [**parse-dutch**][dutch], or [**parse-latin**][latin]
 
-###### Returns
+##### `parser`
+
+Constructor of an NLCST parser (`Function`).  For example,
+[`parse-english`][english], [`parse-dutch`][dutch], or
+[`parse-latin`][latin].
+
+##### Returns
 
 [`NLCSTNode`][nlcst].
 
