@@ -1,6 +1,5 @@
 'use strict';
 
-/* Dependencies. */
 var fs = require('fs');
 var path = require('path');
 var test = require('tape');
@@ -13,17 +12,13 @@ var negate = require('negate');
 var hidden = require('is-hidden');
 var toNLCST = require('..');
 
-/* Methods. */
 var read = fs.readFileSync;
 var join = path.join;
 
-/* Constants. */
 var ROOT = join(__dirname, 'fixtures');
 
-/* Fixtures. */
 var fixtures = fs.readdirSync(ROOT);
 
-/* Tests. */
 test('mdast-util-to-nlcst', function (t) {
   t.throws(
     function () {
@@ -146,7 +141,6 @@ test('mdast-util-to-nlcst', function (t) {
   t.end();
 });
 
-/* Fixtures. */
 test('Fixtures', function (t) {
   fixtures
     .filter(negate(hidden))

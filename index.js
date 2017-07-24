@@ -1,12 +1,10 @@
 'use strict';
 
-/* Dependencies. */
 var repeat = require('repeat-string');
 var vfileLocation = require('vfile-location');
 var position = require('unist-util-position');
 var toString = require('nlcst-to-string');
 
-/* Expose. */
 module.exports = toNLCST;
 
 /* Map of ignored mdast nodes: nodes which have no (simple)
@@ -18,7 +16,6 @@ var IGNORE = {
   tableCell: true
 };
 
-/* Constants. */
 var C_NEWLINE = '\n';
 
 /* Transform `tree` into `nlcst`. */
