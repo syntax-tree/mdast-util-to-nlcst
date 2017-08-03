@@ -46,22 +46,38 @@ RootNode[1] (1:1-1:17, 0-16)
 
 ## API
 
-### `toNLCST(node, file, Parser)`
+### `toNLCST(node, file, Parser[, options])`
 
 Transform an [MDAST][] syntax tree and corresponding [virtual file][vfile]
-into an [NLCST][nlcst] tree.
+into an [NLCST][] tree.
 
 ##### Parameters
 
-*   `node` ([`MDASTNode`][mdast])
-    — Syntax tree (with positional information)
-*   `file` ([`VFile`][vfile])
+###### `node`
 
-##### `parser`
+Syntax tree, with positional information ([`MDASTNode`][mdast]).
+
+###### `file`
+
+Virtual file ([`VFile`][vfile]).
+
+###### `parser`
 
 Constructor of an NLCST parser (`Function`).  For example,
 [`parse-english`][english], [`parse-dutch`][dutch], or
 [`parse-latin`][latin].
+
+###### `options.ignore`
+
+List of node [types][type] to ignore (`Array.<string>`).
+
+`'table'`, `'tableRow'`, and `'tableCell'` are always ignored.
+
+###### `options.source`
+
+List of node [types][type] to mark as [source][] (`Array.<string>`).
+
+`'inlineCode'` is always ignored.
 
 ##### Returns
 
@@ -111,3 +127,7 @@ Constructor of an NLCST parser (`Function`).  For example,
 [latin]: https://github.com/wooorm/parse-latin
 
 [dutch]: https://github.com/wooorm/parse-dutch
+
+[type]: https://github.com/syntax-tree/mdast#ast
+
+[source]: https://github.com/syntax-tree/nlcst#source

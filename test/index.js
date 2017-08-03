@@ -149,9 +149,14 @@ test('Fixtures', function (t) {
       var filepath = join(ROOT, fixture);
       var output = read(join(filepath, 'output.json'), 'utf-8');
       var input = read(join(filepath, 'input.md'), 'utf-8');
+      var options;
+
+      try {
+        options = JSON.parse(read(join(filepath, 'options.json')));
+      } catch (err) {}
 
       t.deepEqual(
-        toNLCST(remark().use(frontmatter).parse(input), vfile(input), Latin),
+        toNLCST(remark().use(frontmatter).parse(input), vfile(input), Latin, options),
         JSON.parse(output),
         'should work on `' + fixture + '`'
       );

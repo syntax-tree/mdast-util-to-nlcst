@@ -7,21 +7,22 @@ var toString = require('nlcst-to-string');
 
 module.exports = toNLCST;
 
-/* Map of ignored mdast nodes: nodes which have no (simple)
- * representation in NLCST. */
-var IGNORE = {
-  horizontalRule: true,
-  table: true,
-  tableRow: true,
-  tableCell: true
-};
+var ignore = [
+  'table',
+  'tableRow',
+  'tableCell'
+];
 
-var C_NEWLINE = '\n';
+var source = [
+  'inlineCode'
+];
+
+var newline = '\n';
 
 /* Transform `tree` into `nlcst`. */
-function toNLCST(tree, file, Parser) {
+function toNLCST(tree, file, Parser, options) {
+  var settings = options || {};
   var parser;
-  var location;
 
   /* Warn for invalid parameters. */
   if (!tree || !tree.type) {
@@ -37,8 +38,6 @@ function toNLCST(tree, file, Parser) {
     throw new Error('mdast-util-to-nlcst expected parser');
   }
 
-  location = vfileLocation(file);
-
   if (
     !tree.position ||
     !tree.position.start ||
@@ -53,44 +52,51 @@ function toNLCST(tree, file, Parser) {
   /* Transform mdast into NLCST tokens, and pass these
    * into `parser.parse` to insert sentences, paragraphs
    * where needed. */
-  return parser.parse(one(tree, null, null, file, location, parser));
+  return parser.parse(one({
+    doc: String(file),
+    location: vfileLocation(file),
+    parser: parser,
+    ignore: ignore.concat(settings.ignore || []),
+    source: source.concat(settings.source || [])
+  }, tree));
 }
 
 /* Convert `node` into NLCST. */
-function one(node, index, parent, file, location, parser) {
+function one(config, node) {
+  var offset = config.location.toOffset;
+  var parser = config.parser;
+  var doc = config.doc;
   var type = node.type;
-  var doc = String(file);
-  var start = location.toOffset(position.start(node));
-  var end = location.toOffset(position.end(node));
-  var replacement;
+  var start = offset(position.start(node));
+  var end = offset(position.end(node));
 
-  if (type in IGNORE) {
-    return null;
+  if (config.ignore.indexOf(type) === -1) {
+    if (config.source.indexOf(type) !== -1) {
+      return patch(config, [parser.tokenizeSource(doc.slice(start, end))], start);
+    }
+
+    if (node.children) {
+      return all(config, node);
+    }
+
+    if (type === 'image' || type === 'imageReference') {
+      return patch(config, parser.tokenize(node.alt), start + 2);
+    }
+
+    if (type === 'text' || type === 'escape') {
+      return patch(config, parser.tokenize(node.value), start);
+    }
+
+    if (node.type === 'break') {
+      return patch(config, [parser.tokenizeWhiteSpace('\n')], start);
+    }
   }
 
-  if (node.children) {
-    replacement = all(node, file, location, parser);
-  } else if (
-    type === 'image' ||
-    type === 'imageReference'
-  ) {
-    replacement = patch(parser.tokenize(node.alt), location, start + 2);
-  } else if (
-    type === 'text' ||
-    type === 'escape'
-  ) {
-    replacement = patch(parser.tokenize(node.value), location, start);
-  } else if (node.type === 'break') {
-    replacement = patch([parser.tokenizeWhiteSpace('\n')], location, start);
-  } else if (node.type === 'inlineCode') {
-    replacement = patch([parser.tokenizeSource(doc.slice(start, end))], location, start);
-  }
-
-  return replacement || null;
+  return null;
 }
 
 /* Convert all nodes in `parent` (mdast) into NLCST. */
-function all(parent, file, location, parser) {
+function all(config, parent) {
   var children = parent.children;
   var length = children && children.length;
   var index = -1;
@@ -108,20 +114,17 @@ function all(parent, file, location, parser) {
     endLine = position.start(node).line;
 
     if (prevEndLine && endLine !== prevEndLine) {
-      child = parser.tokenizeWhiteSpace(
-        repeat(C_NEWLINE, endLine - prevEndLine)
-      );
-
-      patch([child], location, prevOffset);
+      child = config.parser.tokenizeWhiteSpace(repeat(newline, endLine - prevEndLine));
+      patch(config, [child], prevOffset);
 
       if (child.value.length < 2) {
-        child.value = repeat(C_NEWLINE, 2);
+        child.value = repeat(newline, 2);
       }
 
       result.push(child);
     }
 
-    child = one(node, index, parent, file, location, parser);
+    child = one(config, node);
 
     if (child) {
       result = result.concat(child);
@@ -138,7 +141,8 @@ function all(parent, file, location, parser) {
 /* Patch a position on each node in `nodes`.
  * `offset` is the offset in `file` this run of content
  * starts at. */
-function patch(nodes, location, offset) {
+function patch(config, nodes, offset) {
+  var position = config.location.toPosition;
   var length = nodes.length;
   var index = -1;
   var start = offset;
@@ -151,14 +155,14 @@ function patch(nodes, location, offset) {
     children = node.children;
 
     if (children) {
-      patch(children, location, start);
+      patch(config, children, start);
     }
 
     end = start + toString(node).length;
 
     node.position = {
-      start: location.toPosition(start),
-      end: location.toPosition(end)
+      start: position(start),
+      end: position(end)
     };
 
     start = end;
