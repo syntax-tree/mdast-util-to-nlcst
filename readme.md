@@ -94,6 +94,14 @@ List of node [types][type] to mark as [source][] (`Array.<string>`).
 *   [`mdast-util-to-hast`](https://github.com/syntax-tree/mdast-util-to-hast)
     — Transform MDAST to HAST
 
+## Contribute
+
+See [`contribute.md` in `syntax-tree/mdast`][contribute] for ways to get
+started.
+
+This organisation has a [Code of Conduct][coc].  By interacting with this
+repository, organisation, or community you agree to abide by its terms.
+
 ## License
 
 [MIT][license] © [Titus Wormer][author]
@@ -131,3 +139,7 @@ List of node [types][type] to mark as [source][] (`Array.<string>`).
 [type]: https://github.com/syntax-tree/mdast#ast
 
 [source]: https://github.com/syntax-tree/nlcst#source
+
+[contribute]: https://github.com/syntax-tree/mdast/blob/master/contributing.md
+
+[coc]: https://github.com/syntax-tree/mdast/blob/master/code-of-conduct.md
