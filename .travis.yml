@@ -5,6 +5,7 @@ node_js:
 after_script: bash <(curl -s https://codecov.io/bash)
 deploy:
   - provider: npm
+    skip_cleanup: true
     email: tituswormer@gmail.com
     api_key:
       secure: ktMmSsdD5PXBn07Ns6A3Ly814H8TQyPeb7TuTJNlBYGwkkdyBElwJAsiDDdj+tHr8FPiP7qCaZrOmynxyvFiXRRFOJj3P9UA3IzptMMQPnqaOYLF1AQvSBnGdo54sGXa9cnKICBGT6cuap8HZ6blJAEEwkeq9UH3cbT4knQahmEeDmJbg5hS5mQxC/MpBfOg9+15AAnCN3Q7sMYS33LcstDaKhD5g/BR42+ZSxXTSuNlgG0hEccvXPEMOqtez8ap5vLf+py27nhGjfkL8lUQvsqEb3bB7oTgqsQ8fsOJ3NEDPZXW3pfhe3s9ACk8SDkTmTrdNn97nZG7vsq8ovhzc9ojeAQ4jXjO5tcgUEDborFWtkZ157NwbXPVCThdUP1ZhsbtLk+q+AV1c8ON0fnc8VQgtPDev2X37xIyIuA29YkyDIZ2DkNhIaePK2Z7EOIiwGjIpajGQQjco7Z2bgTnBm44wH6hA6YWDxs/QEaH3o/+0SfWXdTFyX/YPOWpRZcyD2UynymJ2A5bPGdoEGkhYp+nsqKxWDCBb8fBOl2VkO02Y6SwesHOW4v0CpQSNOY8FLqTlOOkeiH+H2d9SsSAQARCG6FMUUafsZEGEW+RKhndBOAY9HGs96Zpz06PJh8SAlgsiNL+kkVnzxdpEKnlA/OUySmXyDftTfJQM2OK1MQ=
@@ -12,6 +13,7 @@ deploy:
       tags: true
       node: '9.0'
   - provider: releases
+    skip_cleanup: true
     api_key:
       secure: RT2G8/cLutMJLAr0bWSSaYDHoQpL5NNAtEi72YQHdl1G/4N30xJiuzw65aoxUnm7ewpKKys3YnFblbJCeLe4CUNfxMm4SrIkJd2oEVGdV5U0eBcXeXBff89pcIdqQ6U5keltgwNKdiw/PAxfvKTNPNrgqtJr1xL8gdu1XgLkVGO2CsLuytkusfaH+jv53uM6UzFZwZYtUVp8X9CigTlpFGKKIB4EN525M1M9mj42BbJ888VTfuCkBpEWXK1ePBlK2HKQXRaRWt01BQ+aKzqNR/Xdi66RKAjFkdi0WbyNetZVJtnOalRhUV7lpCiTCmjQhjt1ldBXpjY2Mq27vylMe54MyfDYgVzeRDkCO/dWTdpueyBTsteBYairBhXeIcZ9mLzahXB3SkRErfGMJwNCkNNxnHBku3nrv3150UppmzOEl9sZXht7D26Ikjqhxk5saabiRDUuD5vlvXbXZ+HbQB0UIYp1PHuX656I8Myh/o5bgxdXgotSFa97rP+tlaoc6ITip/LsAAbwbiNkNF66jlFGUFtn9TcMUsGMDUJk2H9U3iY9ohFHyEOcs2vpQbjFxr6B9SoB4wMCzcHqNH/TbaVRtP/9isGMR/TY5IMPEhcd+DT0iSW1V+DhMN4ur/x+HuNSRvN1Lp3fOWs5v8BBTtOfO6N1SMYQTwZdXmkNzHk=
     file:
