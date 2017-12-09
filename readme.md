@@ -181,7 +181,7 @@ repository, organisation, or community you agree to abide by its terms.
 
 [nlcst]: https://github.com/syntax-tree/nlcst
 
-[remark-retext]: https://github.com/wooorm/remark-retext
+[remark-retext]: https://github.com/remarkjs/remark-retext
 
 [vfile]: https://github.com/vfile/vfile
 
