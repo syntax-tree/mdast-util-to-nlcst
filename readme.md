@@ -2,7 +2,7 @@
 
 Transform [MDAST][] to [NLCST][].
 
-> **Note** You probably want to use [`remark-retext`][remark-retext].
+> **Note**: You probably want to use [`remark-retext`][remark-retext].
 
 ## Installation
 
@@ -77,11 +77,66 @@ List of node [types][type] to ignore (`Array.<string>`).
 
 List of node [types][type] to mark as [source][] (`Array.<string>`).
 
-`'inlineCode'` is always ignored.
+`'inlineCode'` is always marked as source.
 
 ##### Returns
 
 [`NLCSTNode`][nlcst].
+
+##### Examples
+
+###### `ignore`
+
+Say we have the following file `example.md`:
+
+```markdown
+A paragraph.
+
+> A paragraph in a block quote.
+```
+
+…and if we now transform with `ignore: ['blockquote']`, we get:
+
+```txt
+RootNode[2] (1:1-3:1, 0-14)
+├─ ParagraphNode[1] (1:1-1:13, 0-12)
+│  └─ SentenceNode[4] (1:1-1:13, 0-12)
+│     ├─ WordNode[1] (1:1-1:2, 0-1)
+│     │  └─ TextNode: "A" (1:1-1:2, 0-1)
+│     ├─ WhiteSpaceNode: " " (1:2-1:3, 1-2)
+│     ├─ WordNode[1] (1:3-1:12, 2-11)
+│     │  └─ TextNode: "paragraph" (1:3-1:12, 2-11)
+│     └─ PunctuationNode: "." (1:12-1:13, 11-12)
+└─ WhiteSpaceNode: "\n\n" (1:13-3:1, 12-14)
+```
+
+###### `source`
+
+Say we have the following file `example.md`:
+
+```markdown
+A paragraph.
+
+> A paragraph in a block quote.
+```
+
+…and if we now transform with `source: ['blockquote']`, we get:
+
+```txt
+RootNode[3] (1:1-3:32, 0-45)
+├─ ParagraphNode[1] (1:1-1:13, 0-12)
+│  └─ SentenceNode[4] (1:1-1:13, 0-12)
+│     ├─ WordNode[1] (1:1-1:2, 0-1)
+│     │  └─ TextNode: "A" (1:1-1:2, 0-1)
+│     ├─ WhiteSpaceNode: " " (1:2-1:3, 1-2)
+│     ├─ WordNode[1] (1:3-1:12, 2-11)
+│     │  └─ TextNode: "paragraph" (1:3-1:12, 2-11)
+│     └─ PunctuationNode: "." (1:12-1:13, 11-12)
+├─ WhiteSpaceNode: "\n\n" (1:13-3:1, 12-14)
+└─ ParagraphNode[1] (3:1-3:32, 14-45)
+   └─ SentenceNode[1] (3:1-3:32, 14-45)
+      └─ SourceNode: "> A paragraph in a block quote." (3:1-3:32, 14-45)
+```
 
 ## Related
 
