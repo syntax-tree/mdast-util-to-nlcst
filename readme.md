@@ -151,7 +151,7 @@ RootNode[3] (1:1-3:32, 0-45)
 
 ## Contribute
 
-See [`contribute.md` in `syntax-tree/mdast`][contribute] for ways to get
+See [`contributing.md` in `syntax-tree/mdast`][contributing] for ways to get
 started.
 
 This organisation has a [Code of Conduct][coc].  By interacting with this
@@ -195,6 +195,6 @@ repository, organisation, or community you agree to abide by its terms.
 
 [source]: https://github.com/syntax-tree/nlcst#source
 
-[contribute]: https://github.com/syntax-tree/mdast/blob/master/contributing.md
+[contributing]: https://github.com/syntax-tree/mdast/blob/master/contributing.md
 
 [coc]: https://github.com/syntax-tree/mdast/blob/master/code-of-conduct.md
