@@ -15,18 +15,18 @@ npm install mdast-util-to-nlcst
 ## Usage
 
 ```javascript
-var toNLCST = require('mdast-util-to-nlcst');
-var inspect = require('unist-util-inspect');
-var English = require('parse-english');
-var remark = require('remark');
-var vfile = require('vfile');
+var toNLCST = require('mdast-util-to-nlcst')
+var inspect = require('unist-util-inspect')
+var English = require('parse-english')
+var remark = require('remark')
+var vfile = require('vfile')
 
-var file = vfile('Some *foo*sball.');
-var tree = remark().parse(file);
+var file = vfile('Some *foo*sball.')
+var tree = remark().parse(file)
 
-var nlcst = toNLCST(tree, file, English);
+var nlcst = toNLCST(tree, file, English)
 
-console.log(inspect(nlcst));
+console.log(inspect(nlcst))
 ```
 
 Yields:

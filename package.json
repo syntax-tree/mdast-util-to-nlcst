@@ -36,6 +36,7 @@
     "parse-dutch": "^4.0.0",
     "parse-english": "^4.0.0",
     "parse-latin": "^4.0.0",
+    "prettier": "^1.14.3",
     "remark": "^10.0.0",
     "remark-cli": "^6.0.0",
     "remark-frontmatter": "^1.0.0",
@@ -45,14 +46,13 @@
     "xo": "^0.23.0"
   },
   "scripts": {
-    "build-md": "remark *.md -qfo",
+    "format": "remark *.md -qfo && prettier --write '**/*.js' && xo --fix",
     "build-bundle": "browserify index.js --bare -s mdastUtilToNLCST > mdast-util-to-nlcst.js",
     "build-mangle": "esmangle mdast-util-to-nlcst.js > mdast-util-to-nlcst.min.js",
-    "build": "npm run build-md && npm run build-bundle && npm run build-mangle",
-    "lint": "xo",
+    "build": "npm run build-bundle && npm run build-mangle",
     "test-api": "node test",
     "test-coverage": "nyc --reporter lcov tape test/index.js",
-    "test": "npm run build && npm run lint && npm run test-coverage"
+    "test": "npm run format && npm run build && npm run test-coverage"
   },
   "nyc": {
     "check-coverage": true,
@@ -60,8 +60,16 @@
     "functions": 100,
     "branches": 100
   },
+  "prettier": {
+    "tabWidth": 2,
+    "useTabs": false,
+    "singleQuote": true,
+    "bracketSpacing": false,
+    "semi": false,
+    "trailingComma": "none"
+  },
   "xo": {
-    "space": true,
+    "prettier": true,
     "esnext": false,
     "rules": {
       "max-params": "off"
