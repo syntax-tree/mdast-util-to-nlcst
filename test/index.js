@@ -153,7 +153,7 @@ test('Fixtures', function (t) {
 
       try {
         options = JSON.parse(read(join(filepath, 'options.json')));
-      } catch (err) {}
+      } catch (error) {}
 
       t.deepEqual(
         toNLCST(remark().use(frontmatter).parse(input), vfile(input), Latin, options),
