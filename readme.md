@@ -8,21 +8,21 @@
 [![Backers][backers-badge]][collective]
 [![Chat][chat-badge]][chat]
 
-Transform [MDAST][] to [NLCST][].
+[**mdast**][mdast] utility to transform to [**nlcst**][nlcst].
 
 > **Note**: You probably want to use [`remark-retext`][remark-retext].
 
-## Installation
+## Install
 
 [npm][]:
 
-```bash
+```sh
 npm install mdast-util-to-nlcst
 ```
 
 ## Usage
 
-```javascript
+```js
 var toNLCST = require('mdast-util-to-nlcst')
 var inspect = require('unist-util-inspect')
 var English = require('parse-english')
@@ -54,16 +54,16 @@ RootNode[1] (1:1-1:17, 0-16)
 
 ## API
 
-### `toNLCST(node, file, Parser[, options])`
+### `toNlcst(tree, file, Parser[, options])`
 
-Transform an [MDAST][] syntax tree and corresponding [virtual file][vfile]
-into an [NLCST][] tree.
+Transform a [tree][] in [mdast][], with a corresponding [virtual file][vfile],
+into [nlcst][].
 
 ##### Parameters
 
 ###### `node`
 
-Syntax tree, with positional information ([`MDASTNode`][mdast]).
+Tree in [mdast][] with positional information ([`MdastNode`][mdastnode]).
 
 ###### `file`
 
@@ -71,25 +71,25 @@ Virtual file ([`VFile`][vfile]).
 
 ###### `parser`
 
-Constructor of an NLCST parser (`Function`).  For example,
-[`parse-english`][english], [`parse-dutch`][dutch], or
+[nlcst][] parser (`Function`).
+For example, [`parse-english`][english], [`parse-dutch`][dutch], or
 [`parse-latin`][latin].
 
 ###### `options.ignore`
 
-List of node [types][type] to ignore (`Array.<string>`).
+List of [types][type] to ignore (`Array.<string>`).
 
 `'table'`, `'tableRow'`, and `'tableCell'` are always ignored.
 
 ###### `options.source`
 
-List of node [types][type] to mark as [source][] (`Array.<string>`).
+List of [types][type] to mark as [source][] (`Array.<string>`).
 
 `'inlineCode'` is always marked as source.
 
 ##### Returns
 
-[`NLCSTNode`][nlcst].
+[`NlcstNode`][nlcstnode].
 
 ##### Examples
 
@@ -97,7 +97,7 @@ List of node [types][type] to mark as [source][] (`Array.<string>`).
 
 Say we have the following file `example.md`:
 
-```markdown
+```md
 A paragraph.
 
 > A paragraph in a block quote.
@@ -122,7 +122,7 @@ RootNode[2] (1:1-3:1, 0-14)
 
 Say we have the following file `example.md`:
 
-```markdown
+```md
 A paragraph.
 
 > A paragraph in a block quote.
@@ -151,19 +151,21 @@ RootNode[3] (1:1-3:32, 0-45)
 *   [`remark-retext`][remark-retext]
     — **retext** support for **remark**
 *   [`hast-util-to-nlcst`](https://github.com/syntax-tree/hast-util-to-nlcst)
-    — Transform HAST to NLCST
+    — Transform [hast][] to [nlcst][]
 *   [`hast-util-to-mdast`](https://github.com/syntax-tree/hast-util-to-mdast)
-    — Transform HAST to MDAST
+    — Transform [hast][] to [mdast][]
 *   [`mdast-util-to-hast`](https://github.com/syntax-tree/mdast-util-to-hast)
-    — Transform MDAST to HAST
+    — Transform [mdast][] to [hast][]
 
 ## Contribute
 
-See [`contributing.md` in `syntax-tree/mdast`][contributing] for ways to get
+See [`contributing.md` in `syntax-tree/.github`][contributing] for ways to get
 started.
+See [`support.md`][support] for ways to get help.
 
-This organisation has a [Code of Conduct][coc].  By interacting with this
-repository, organisation, or community you agree to abide by its terms.
+This project has a [Code of Conduct][coc].
+By interacting with this repository, organisation, or community you agree to
+abide by its terms.
 
 ## License
 
@@ -203,9 +205,17 @@ repository, organisation, or community you agree to abide by its terms.
 
 [author]: https://wooorm.com
 
+[contributing]: https://github.com/syntax-tree/.github/blob/master/contributing.md
+
+[support]: https://github.com/syntax-tree/.github/blob/master/support.md
+
+[coc]: https://github.com/syntax-tree/.github/blob/master/code-of-conduct.md
+
 [mdast]: https://github.com/syntax-tree/mdast
 
 [nlcst]: https://github.com/syntax-tree/nlcst
+
+[hast]: https://github.com/syntax-tree/hast
 
 [remark-retext]: https://github.com/remarkjs/remark-retext
 
@@ -221,6 +231,8 @@ repository, organisation, or community you agree to abide by its terms.
 
 [source]: https://github.com/syntax-tree/nlcst#source
 
-[contributing]: https://github.com/syntax-tree/mdast/blob/master/contributing.md
+[tree]: https://github.com/syntax-tree/unist#tree
 
-[coc]: https://github.com/syntax-tree/mdast/blob/master/code-of-conduct.md
+[mdastnode]: https://github.com/syntax-tree/mdast#nodes
+
+[nlcstnode]: https://github.com/syntax-tree/nlcst#nodes
