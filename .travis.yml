@@ -1,7 +1,7 @@
 language: node_js
 node_js:
-- lts/boron
-- node
+  - lts/dubnium
+  - node
 after_script: bash <(curl -s https://codecov.io/bash)
 deploy:
   provider: releases
@@ -9,7 +9,7 @@ deploy:
   api_key:
     secure: ZPTCW8h9y6gga8z1MtrATTDJsTogOXsOE8QJCMu29Unlvc4E1RgXXH+Y9+feHyEGenxzsnfLSOltyuzIG5OO3pXqCoUACCElOGp0oBaMJkKDGlAyPtK7TIlBPWt/MnpZAgHN9ywAgHOZ60kFIlVtnsGnufkkHjjOz5dmkV9528/QN3EnYG/WCnL18U7hIbNRWht/Hol6RTMeDw7ZxtCwSdMYT0rpvvWS878OXN2ZFcI8C3grNxcSrPrqtDHGVfxb4gNdyDyXxd5avCyYY199t0Sl1n59D0CP6YuMyqw9hbuhRNUYrRl7jk3Rj5BGJCEPPsBKnAc2ZCWtnIXr1QDFPZ7NegAGS0GzhtgWy7qJbEgNzHMhAhHY+gpIrbPMaCoP9HZvpiFKhha5ghZdvHguHrYXfNPCv7GL7M+XEzcegVPKzftCCZ7pMcZCslHf2MjQbacnOT1FZ9bWOQjvn607Ura4kj9HNvB9x+ZxWrYzniIuLr0WgeE0C7GhSLM/Uuu0XzyulUYcTXQ3IWCkq3y1lc6F1Ki/jQGAEZYyJ4LvbFJ4IYE4hqCJIry2xpN9DDlTf6r21W0JmqLezVotqMF//UZQma2W5HbiVT7rLE6RSvfGpAFKuIx9CSKmFNn4eLYmfNafwxXE5xF61ClkSzcX2L8YQzGIxbIcdJU4FQkMQJs=
   file:
-    - "mdast-util-to-nlcst.js"
-    - "mdast-util-to-nlcst.min.js"
+    - 'mdast-util-to-nlcst.js'
+    - 'mdast-util-to-nlcst.min.js'
   on:
     tags: true
