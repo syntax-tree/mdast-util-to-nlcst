@@ -71,9 +71,6 @@
   "xo": {
     "prettier": true,
     "esnext": false,
-    "rules": {
-      "max-params": "off"
-    },
     "ignores": [
       "mdast-util-to-nlcst.js"
     ]
