@@ -46,7 +46,7 @@
     "xo": "^0.23.0"
   },
   "scripts": {
-    "format": "remark *.md -qfo && prettier --write '**/*.js' && xo --fix",
+    "format": "remark *.md -qfo && prettier --write \"**/*.js\" && xo --fix",
     "build-bundle": "browserify . -s mdastUtilToNLCST > mdast-util-to-nlcst.js",
     "build-mangle": "browserify . -s mdastUtilToNLCST -p tinyify > mdast-util-to-nlcst.min.js",
     "build": "npm run build-bundle && npm run build-mangle",
