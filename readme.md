@@ -146,6 +146,11 @@ RootNode[3] (1:1-3:32, 0-45)
       └─ SourceNode: "> A paragraph in a block quote." (3:1-3:32, 14-45)
 ```
 
+## Security
+
+Use of `mdast-util-to-nlcst` does not involve [**hast**][hast] so there are no
+openings for [cross-site scripting (XSS)][xss] attacks.
+
 ## Related
 
 *   [`remark-retext`][remark-retext]
@@ -236,3 +241,7 @@ abide by its terms.
 [mdastnode]: https://github.com/syntax-tree/mdast#nodes
 
 [nlcstnode]: https://github.com/syntax-tree/nlcst#nodes
+
+[xss]: https://en.wikipedia.org/wiki/Cross-site_scripting
+
+[hast]: https://github.com/syntax-tree/hast
