@@ -243,5 +243,3 @@ abide by its terms.
 [nlcstnode]: https://github.com/syntax-tree/nlcst#nodes
 
 [xss]: https://en.wikipedia.org/wiki/Cross-site_scripting
-
-[hast]: https://github.com/syntax-tree/hast
