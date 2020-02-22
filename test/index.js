@@ -146,7 +146,7 @@ test('Fixtures', function(t) {
 
     try {
       options = JSON.parse(read(join(filepath, 'options.json')))
-    } catch (error) {}
+    } catch (_) {}
 
     t.deepEqual(
       toNLCST(
