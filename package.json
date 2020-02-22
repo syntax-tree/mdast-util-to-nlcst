@@ -1,13 +1,16 @@
 {
   "name": "mdast-util-to-nlcst",
   "version": "3.2.3",
-  "description": "Transform MDAST to NLCST",
+  "description": "mdast utility to transform to nlcst",
   "license": "MIT",
   "keywords": [
+    "unist",
     "mdast",
-    "remark",
+    "mdast-util",
     "nlcst",
-    "retext",
+    "nlcst-util",
+    "util",
+    "utility",
     "markdown",
     "natural",
     "language"
