@@ -159,6 +159,8 @@ openings for [cross-site scripting (XSS)][xss] attacks.
     — Transform [hast][] to [nlcst][]
 *   [`hast-util-to-mdast`](https://github.com/syntax-tree/hast-util-to-mdast)
     — Transform [hast][] to [mdast][]
+*   [`hast-util-to-xast`](https://github.com/syntax-tree/hast-util-to-xast)
+    — Transform [hast][] to [xast][]
 *   [`mdast-util-to-hast`](https://github.com/syntax-tree/mdast-util-to-hast)
     — Transform [mdast][] to [hast][]
 
@@ -221,6 +223,8 @@ abide by its terms.
 [nlcst]: https://github.com/syntax-tree/nlcst
 
 [hast]: https://github.com/syntax-tree/hast
+
+[xast]: https://github.com/syntax-tree/xast
 
 [remark-retext]: https://github.com/remarkjs/remark-retext
 
