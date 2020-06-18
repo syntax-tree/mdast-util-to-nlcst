@@ -42,20 +42,20 @@
     "parse-dutch": "^4.0.0",
     "parse-english": "^4.0.0",
     "parse-latin": "^4.0.0",
-    "prettier": "^1.0.0",
-    "remark": "^11.0.0",
-    "remark-cli": "^7.0.0",
-    "remark-frontmatter": "^1.0.0",
-    "remark-preset-wooorm": "^6.0.0",
-    "tape": "^4.0.0",
+    "prettier": "^2.0.0",
+    "remark": "^12.0.0",
+    "remark-cli": "^8.0.0",
+    "remark-frontmatter": "^2.0.0",
+    "remark-preset-wooorm": "^7.0.0",
+    "tape": "^5.0.0",
     "tinyify": "^2.0.0",
     "vfile": "^4.0.0",
-    "xo": "^0.26.0"
+    "xo": "^0.32.0"
   },
   "scripts": {
-    "format": "remark *.md -qfo && prettier --write \"**/*.js\" && xo --fix",
-    "build-bundle": "browserify . -s mdastUtilToNLCST > mdast-util-to-nlcst.js",
-    "build-mangle": "browserify . -s mdastUtilToNLCST -p tinyify > mdast-util-to-nlcst.min.js",
+    "format": "remark *.md -qfo && prettier . --write && xo --fix",
+    "build-bundle": "browserify . -s mdastUtilToNlcst > mdast-util-to-nlcst.js",
+    "build-mangle": "browserify . -s mdastUtilToNlcst -p tinyify > mdast-util-to-nlcst.min.js",
     "build": "npm run build-bundle && npm run build-mangle",
     "test-api": "node test",
     "test-coverage": "nyc --reporter lcov tape test/index.js",
@@ -79,7 +79,9 @@
     "prettier": true,
     "esnext": false,
     "rules": {
-      "unicorn/prefer-includes": "off"
+      "unicorn/no-fn-reference-in-iterator": "off",
+      "unicorn/prefer-includes": "off",
+      "unicorn/prefer-optional-catch-binding": "off"
     },
     "ignores": [
       "mdast-util-to-nlcst.js"

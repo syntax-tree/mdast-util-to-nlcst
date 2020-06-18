@@ -106,8 +106,8 @@ function all(config, parent) {
   var child
   var node
   var pos
-  var prevEndLine
-  var prevOffset
+  var previousEndLine
+  var previousOffset
   var endLine
 
   while (++index < length) {
@@ -115,11 +115,11 @@ function all(config, parent) {
     pos = node.position
     endLine = position.start(node).line
 
-    if (prevEndLine && endLine !== prevEndLine) {
+    if (previousEndLine && endLine !== previousEndLine) {
       child = config.parser.tokenizeWhiteSpace(
-        repeat(newline, endLine - prevEndLine)
+        repeat(newline, endLine - previousEndLine)
       )
-      patch(config, [child], prevOffset)
+      patch(config, [child], previousOffset)
 
       if (child.value.length < 2) {
         child.value = repeat(newline, 2)
@@ -135,8 +135,8 @@ function all(config, parent) {
     }
 
     pos = position.end(node)
-    prevEndLine = pos.line
-    prevOffset = pos.offset
+    previousEndLine = pos.line
+    previousOffset = pos.offset
   }
 
   return result

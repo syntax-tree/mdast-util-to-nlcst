@@ -20,9 +20,9 @@ var ROOT = join(__dirname, 'fixtures')
 
 var fixtures = fs.readdirSync(ROOT)
 
-test('mdast-util-to-nlcst', function(t) {
+test('mdast-util-to-nlcst', function (t) {
   t.throws(
-    function() {
+    function () {
       toNLCST()
     },
     /mdast-util-to-nlcst expected node/,
@@ -30,7 +30,7 @@ test('mdast-util-to-nlcst', function(t) {
   )
 
   t.throws(
-    function() {
+    function () {
       toNLCST({})
     },
     /mdast-util-to-nlcst expected node/,
@@ -38,7 +38,7 @@ test('mdast-util-to-nlcst', function(t) {
   )
 
   t.throws(
-    function() {
+    function () {
       toNLCST({type: 'foo'})
     },
     /mdast-util-to-nlcst expected file/,
@@ -46,7 +46,7 @@ test('mdast-util-to-nlcst', function(t) {
   )
 
   t.throws(
-    function() {
+    function () {
       toNLCST({type: 'foo'})
     },
     /mdast-util-to-nlcst expected file/,
@@ -54,7 +54,7 @@ test('mdast-util-to-nlcst', function(t) {
   )
 
   t.throws(
-    function() {
+    function () {
       toNLCST({type: 'text', value: 'foo'}, {foo: 'bar'})
     },
     /mdast-util-to-nlcst expected file/,
@@ -62,7 +62,7 @@ test('mdast-util-to-nlcst', function(t) {
   )
 
   t.throws(
-    function() {
+    function () {
       toNLCST({type: 'text', value: 'foo'}, vfile('foo'))
     },
     /mdast-util-to-nlcst expected parser/,
@@ -70,14 +70,14 @@ test('mdast-util-to-nlcst', function(t) {
   )
 
   t.throws(
-    function() {
+    function () {
       toNLCST({type: 'text', value: 'foo'}, vfile(), Latin)
     },
     /mdast-util-to-nlcst expected position on nodes/,
     'should fail when not given positional information'
   )
 
-  t.doesNotThrow(function() {
+  t.doesNotThrow(function () {
     toNLCST(
       {
         type: 'text',
@@ -89,7 +89,7 @@ test('mdast-util-to-nlcst', function(t) {
     )
   }, 'should accept a parser constructor')
 
-  t.doesNotThrow(function() {
+  t.doesNotThrow(function () {
     toNLCST(
       {
         type: 'text',
@@ -102,7 +102,7 @@ test('mdast-util-to-nlcst', function(t) {
   }, 'should accept a parser instance')
 
   t.throws(
-    function() {
+    function () {
       toNLCST(
         {
           type: 'text',
@@ -117,7 +117,7 @@ test('mdast-util-to-nlcst', function(t) {
     'should fail when not given positional information (#2)'
   )
 
-  t.test('should accept nodes without offsets', function(st) {
+  t.test('should accept nodes without offsets', function (st) {
     var node = toNLCST(
       {
         type: 'text',
@@ -137,8 +137,8 @@ test('mdast-util-to-nlcst', function(t) {
   t.end()
 })
 
-test('Fixtures', function(t) {
-  fixtures.filter(negate(hidden)).forEach(function(fixture) {
+test('Fixtures', function (t) {
+  fixtures.filter(negate(hidden)).forEach(function (fixture) {
     var filepath = join(ROOT, fixture)
     var output = read(join(filepath, 'output.json'), 'utf-8')
     var input = read(join(filepath, 'input.md'), 'utf-8')
@@ -150,9 +150,7 @@ test('Fixtures', function(t) {
 
     t.deepEqual(
       toNLCST(
-        remark()
-          .use(frontmatter)
-          .parse(input),
+        remark().use(frontmatter).parse(input),
         vfile(input),
         Latin,
         options
