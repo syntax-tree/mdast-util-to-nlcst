@@ -4,26 +4,20 @@ var fs = require('fs')
 var path = require('path')
 var test = require('tape')
 var remark = require('remark')
+var gfm = require('remark-gfm')
 var frontmatter = require('remark-frontmatter')
-var vfile = require('vfile')
+var vfile = require('to-vfile')
 var Latin = require('parse-latin')
 var Dutch = require('parse-dutch')
 var English = require('parse-english')
 var negate = require('negate')
 var hidden = require('is-hidden')
-var toNLCST = require('..')
-
-var read = fs.readFileSync
-var join = path.join
-
-var ROOT = join(__dirname, 'fixtures')
-
-var fixtures = fs.readdirSync(ROOT)
+var toNlcst = require('..')
 
 test('mdast-util-to-nlcst', function (t) {
   t.throws(
     function () {
-      toNLCST()
+      toNlcst()
     },
     /mdast-util-to-nlcst expected node/,
     'should fail when not given an AST'
@@ -31,7 +25,7 @@ test('mdast-util-to-nlcst', function (t) {
 
   t.throws(
     function () {
-      toNLCST({})
+      toNlcst({})
     },
     /mdast-util-to-nlcst expected node/,
     'should fail when not given an AST (#2)'
@@ -39,7 +33,7 @@ test('mdast-util-to-nlcst', function (t) {
 
   t.throws(
     function () {
-      toNLCST({type: 'foo'})
+      toNlcst({type: 'foo'})
     },
     /mdast-util-to-nlcst expected file/,
     'should fail when not given a file'
@@ -47,7 +41,7 @@ test('mdast-util-to-nlcst', function (t) {
 
   t.throws(
     function () {
-      toNLCST({type: 'foo'})
+      toNlcst({type: 'foo'})
     },
     /mdast-util-to-nlcst expected file/,
     'should fail when not given a file (#2)'
@@ -55,7 +49,7 @@ test('mdast-util-to-nlcst', function (t) {
 
   t.throws(
     function () {
-      toNLCST({type: 'text', value: 'foo'}, {foo: 'bar'})
+      toNlcst({type: 'text', value: 'foo'}, {foo: 'bar'})
     },
     /mdast-util-to-nlcst expected file/,
     'should fail when not given a file (#3)'
@@ -63,7 +57,7 @@ test('mdast-util-to-nlcst', function (t) {
 
   t.throws(
     function () {
-      toNLCST({type: 'text', value: 'foo'}, vfile('foo'))
+      toNlcst({type: 'text', value: 'foo'}, vfile({contents: 'foo'}))
     },
     /mdast-util-to-nlcst expected parser/,
     'should fail without parser'
@@ -71,14 +65,14 @@ test('mdast-util-to-nlcst', function (t) {
 
   t.throws(
     function () {
-      toNLCST({type: 'text', value: 'foo'}, vfile(), Latin)
+      toNlcst({type: 'text', value: 'foo'}, vfile(), Latin)
     },
     /mdast-util-to-nlcst expected position on nodes/,
     'should fail when not given positional information'
   )
 
   t.doesNotThrow(function () {
-    toNLCST(
+    toNlcst(
       {
         type: 'text',
         value: 'foo',
@@ -90,7 +84,7 @@ test('mdast-util-to-nlcst', function (t) {
   }, 'should accept a parser constructor')
 
   t.doesNotThrow(function () {
-    toNLCST(
+    toNlcst(
       {
         type: 'text',
         value: 'foo',
@@ -103,7 +97,7 @@ test('mdast-util-to-nlcst', function (t) {
 
   t.throws(
     function () {
-      toNLCST(
+      toNlcst(
         {
           type: 'text',
           value: 'foo',
@@ -118,13 +112,13 @@ test('mdast-util-to-nlcst', function (t) {
   )
 
   t.test('should accept nodes without offsets', function (st) {
-    var node = toNLCST(
+    var node = toNlcst(
       {
         type: 'text',
         value: 'foo',
         position: {start: {line: 1, column: 1}, end: {line: 1, column: 4}}
       },
-      vfile('foo'),
+      vfile({contents: 'foo'}),
       Latin
     )
 
@@ -138,27 +132,32 @@ test('mdast-util-to-nlcst', function (t) {
 })
 
 test('Fixtures', function (t) {
-  fixtures.filter(negate(hidden)).forEach(function (fixture) {
-    var filepath = join(ROOT, fixture)
-    var output = read(join(filepath, 'output.json'), 'utf-8')
-    var input = read(join(filepath, 'input.md'), 'utf-8')
-    var options
+  var base = path.join(__dirname, 'fixtures')
 
-    try {
-      options = JSON.parse(read(join(filepath, 'options.json')))
-    } catch (_) {}
+  fs.readdirSync(base)
+    .filter(negate(hidden))
+    .forEach(function (name) {
+      var input = vfile.readSync(path.join(base, name, 'input.md'))
+      var expected = JSON.parse(
+        vfile.readSync(path.join(base, name, 'output.json'))
+      )
+      var options
 
-    t.deepEqual(
-      toNLCST(
-        remark().use(frontmatter).parse(input),
-        vfile(input),
-        Latin,
-        options
-      ),
-      JSON.parse(output),
-      'should work on `' + fixture + '`'
-    )
-  })
+      try {
+        options = JSON.parse(
+          vfile.readSync(path.join(base, name, 'options.json'))
+        )
+      } catch (_) {}
+
+      var mdast = remark()
+        .use(options && options.useRemarkGfm ? gfm : [])
+        .use(options && options.useRemarkFrontmatter ? frontmatter : [])
+        .parse(input)
+
+      var actual = toNlcst(mdast, input, Latin, options)
+
+      t.deepEqual(actual, expected, 'should work on `' + name + '`')
+    })
 
   t.end()
 })

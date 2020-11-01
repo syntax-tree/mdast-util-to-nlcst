@@ -533,9 +533,9 @@
       "value": "\n\n",
       "position": {
         "start": {
-          "line": 5,
-          "column": 1,
-          "offset": 60
+          "line": 4,
+          "column": 17,
+          "offset": 59
         },
         "end": {
           "line": 6,
