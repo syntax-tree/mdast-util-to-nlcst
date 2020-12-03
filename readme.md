@@ -180,9 +180,9 @@ abide by its terms.
 
 <!-- Definitions -->
 
-[build-badge]: https://img.shields.io/travis/syntax-tree/mdast-util-to-nlcst.svg
+[build-badge]: https://github.com/syntax-tree/mdast-util-to-nlcst/workflows/main/badge.svg
 
-[build]: https://travis-ci.org/syntax-tree/mdast-util-to-nlcst
+[build]: https://github.com/syntax-tree/mdast-util-to-nlcst/actions
 
 [coverage-badge]: https://img.shields.io/codecov/c/github/syntax-tree/mdast-util-to-nlcst.svg
 
