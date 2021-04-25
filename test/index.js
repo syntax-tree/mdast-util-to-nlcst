@@ -120,23 +120,6 @@ test('mdast-util-to-nlcst', function (t) {
     'should fail when not given positional information (#2)'
   )
 
-  t.test('should accept nodes without offsets', function (st) {
-    var node = toNlcst(
-      {
-        type: 'text',
-        value: 'foo',
-        position: {start: {line: 1, column: 1}, end: {line: 1, column: 4}}
-      },
-      vfile({contents: 'foo'}),
-      ParseLatin
-    )
-
-    st.equal(node.position.start.offset, 0, 'should set starting offset')
-    st.equal(node.position.end.offset, 3, 'should set ending offset')
-
-    st.end()
-  })
-
   t.end()
 })
 

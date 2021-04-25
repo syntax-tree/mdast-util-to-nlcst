@@ -98,19 +98,18 @@ export function toNlcst(tree, file, Parser, options = {}) {
 function one(config, node) {
   /** @type {number} */
   var start
-  /** @type {number} */
-  var end
 
   if (!config.ignore.includes(node.type)) {
-    // To do: next major — nodes should have offsets, so
-    // `config.location.toOffset` should be superfluous.
-    start = config.location.toOffset(pointStart(node))
-    end = config.location.toOffset(pointEnd(node))
+    start = node.position.start.offset
 
     if (config.source.includes(node.type)) {
       return patch(
         config,
-        [config.parser.tokenizeSource(config.doc.slice(start, end))],
+        [
+          config.parser.tokenizeSource(
+            config.doc.slice(start, node.position.end.offset)
+          )
+        ],
         start
       )
     }
