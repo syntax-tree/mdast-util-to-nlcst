@@ -128,12 +128,7 @@ function one(config, node) {
       return patch(config, [config.parser.tokenizeWhiteSpace('\n')], start)
     }
 
-    // To do: next major — remove `escape`.
-    if (
-      node.type === 'text' ||
-      // @ts-ignore legacy.
-      node.type === 'escape'
-    ) {
+    if (node.type === 'text') {
       return patch(config, config.parser.tokenize(node.value), start)
     }
   }
