@@ -1,14 +1,10 @@
-'use strict'
-
-var toString = require('nlcst-to-string')
-var repeat = require('repeat-string')
-var position = require('unist-util-position')
-var vfileLocation = require('vfile-location')
-
-module.exports = toNlcst
+import repeat from 'repeat-string'
+import {toString} from 'nlcst-to-string'
+import {pointStart, pointEnd} from 'unist-util-position'
+import vfileLocation from 'vfile-location'
 
 // Transform a `tree` in mdast to nlcst.
-function toNlcst(tree, file, Parser, options) {
+export function toNlcst(tree, file, Parser, options) {
   var settings = options || {}
   var parser
 
@@ -44,7 +40,7 @@ function toNlcst(tree, file, Parser, options) {
       {
         doc: String(file),
         location: vfileLocation(file),
-        parser: parser,
+        parser,
         ignore: [].concat(
           'table',
           'tableRow',
@@ -63,13 +59,13 @@ function one(config, node) {
   var start
   var end
 
-  if (config.ignore.indexOf(node.type) < 0) {
+  if (!config.ignore.includes(node.type)) {
     // To do: next major — nodes should have offsets, so
     // `config.location.toOffset` should be superfluous.
-    start = config.location.toOffset(position.start(node))
-    end = config.location.toOffset(position.end(node))
+    start = config.location.toOffset(pointStart(node))
+    end = config.location.toOffset(pointEnd(node))
 
-    if (config.source.indexOf(node.type) > -1) {
+    if (config.source.includes(node.type)) {
       return patch(
         config,
         [config.parser.tokenizeSource(config.doc.slice(start, end))],
@@ -107,7 +103,7 @@ function all(config, parent) {
 
   while (++index < parent.children.length) {
     child = parent.children[index]
-    start = position.start(child)
+    start = pointStart(child)
 
     if (end && start.line !== end.line) {
       lineEnding = config.parser.tokenizeWhiteSpace(
@@ -123,7 +119,7 @@ function all(config, parent) {
     }
 
     result = result.concat(one(config, child) || [])
-    end = position.end(child)
+    end = pointEnd(child)
   }
 
   return result

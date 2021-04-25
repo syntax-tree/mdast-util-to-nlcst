@@ -14,6 +14,9 @@
 
 ## Install
 
+This package is [ESM only](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c):
+Node 12+ is needed to use it and it must be `import`ed instead of `require`d.
+
 [npm][]:
 
 ```sh
@@ -23,16 +26,15 @@ npm install mdast-util-to-nlcst
 ## Use
 
 ```js
-var toNlcst = require('mdast-util-to-nlcst')
-var inspect = require('unist-util-inspect')
-var English = require('parse-english')
-var remark = require('remark')
-var vfile = require('vfile')
+import vfile from 'vfile'
+import {ParseEnglish} from 'parse-english'
+import {inspect} from 'unist-util-inspect'
+import fromMarkdown from 'mdast-util-from-markdown'
+import {toNlcst} from 'mdast-util-to-nlcst'
 
 var file = vfile('Some *foo*sball.')
-var mdast = remark().parse(file)
-
-var nlcst = toNlcst(mdast, file, English)
+var mdast = fromMarkdown(file)
+var nlcst = toNlcst(mdast, file, ParseEnglish)
 
 console.log(inspect(nlcst))
 ```
@@ -53,6 +55,9 @@ RootNode[1] (1:1-1:17, 0-16)
 ```
 
 ## API
+
+This package exports the following identifiers: `toNlcst`.
+There is no default export.
 
 ### `toNlcst(tree, file, Parser[, options])`
 

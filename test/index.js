@@ -1,17 +1,15 @@
-'use strict'
-
-var fs = require('fs')
-var path = require('path')
-var test = require('tape')
-var remark = require('remark')
-var gfm = require('remark-gfm')
-var frontmatter = require('remark-frontmatter')
-var vfile = require('to-vfile')
-var Latin = require('parse-latin')
-var Dutch = require('parse-dutch')
-var English = require('parse-english')
-var isHidden = require('is-hidden')
-var toNlcst = require('..')
+import fs from 'fs'
+import path from 'path'
+import test from 'tape'
+import remark from 'remark'
+import gfm from 'remark-gfm'
+import frontmatter from 'remark-frontmatter'
+import vfile from 'to-vfile'
+import {ParseLatin} from 'parse-latin'
+import {ParseDutch} from 'parse-dutch'
+import {ParseEnglish} from 'parse-english'
+import {isHidden} from 'is-hidden'
+import {toNlcst} from '../index.js'
 
 test('mdast-util-to-nlcst', function (t) {
   t.throws(
@@ -64,7 +62,7 @@ test('mdast-util-to-nlcst', function (t) {
 
   t.throws(
     function () {
-      toNlcst({type: 'text', value: 'foo'}, vfile(), Latin)
+      toNlcst({type: 'text', value: 'foo'}, vfile(), ParseLatin)
     },
     /mdast-util-to-nlcst expected position on nodes/,
     'should fail when not given positional information'
@@ -78,7 +76,7 @@ test('mdast-util-to-nlcst', function (t) {
         position: {start: {line: 1, column: 1}, end: {line: 1, column: 4}}
       },
       vfile(),
-      English
+      ParseEnglish
     )
   }, 'should accept a parser constructor')
 
@@ -90,7 +88,7 @@ test('mdast-util-to-nlcst', function (t) {
         position: {start: {line: 1, column: 1}, end: {line: 1, column: 4}}
       },
       vfile(),
-      new Dutch()
+      new ParseDutch()
     )
   }, 'should accept a parser instance')
 
@@ -103,7 +101,7 @@ test('mdast-util-to-nlcst', function (t) {
           position: {start: {}, end: {}}
         },
         vfile(),
-        Latin
+        ParseLatin
       )
     },
     /mdast-util-to-nlcst expected position on nodes/,
@@ -118,7 +116,7 @@ test('mdast-util-to-nlcst', function (t) {
         position: {start: {line: 1, column: 1}, end: {line: 1, column: 4}}
       },
       vfile({contents: 'foo'}),
-      Latin
+      ParseLatin
     )
 
     st.equal(node.position.start.offset, 0, 'should set starting offset')
@@ -131,7 +129,7 @@ test('mdast-util-to-nlcst', function (t) {
 })
 
 test('Fixtures', function (t) {
-  var base = path.join(__dirname, 'fixtures')
+  var base = path.join('test', 'fixtures')
   var files = fs.readdirSync(base)
   var index = -1
   var name
@@ -152,7 +150,7 @@ test('Fixtures', function (t) {
       options = JSON.parse(
         vfile.readSync(path.join(base, name, 'options.json'))
       )
-    } catch (_) {
+    } catch {
       options = null
     }
 
@@ -162,7 +160,7 @@ test('Fixtures', function (t) {
       .parse(input)
 
     t.deepEqual(
-      toNlcst(mdast, input, Latin, options),
+      toNlcst(mdast, input, ParseLatin, options),
       expected,
       'should work on `' + name + '`'
     )
