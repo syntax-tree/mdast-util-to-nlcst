@@ -1,14 +1,48 @@
+/**
+ * @typedef {import('unist').Node} Node
+ * @typedef {import('unist').Parent} Parent
+ * @typedef {import('unist').Point} Point
+ * @typedef {import('mdast').Content} Content
+ * @typedef {import('vfile').VFile} VFile
+ * @typedef {import('vfile-location').Location} LocationInterface
+ * @typedef {{
+ *   parse(nodes: Node[]): Node
+ *   tokenizeSource(value: string): Node
+ *   tokenizeWhiteSpace(value: string): Node
+ *   tokenize(value: string): Node[]
+ * }} ParserInstance
+ * @typedef {new () => ParserInstance} ParserConstructor
+ *
+ * @typedef Options
+ * @property {Array.<string>} [ignore]
+ * @property {Array.<string>} [source]
+ *
+ * @typedef Context
+ * @property {string} doc
+ * @property {LocationInterface} location
+ * @property {ParserInstance} parser
+ * @property {Array.<string>} ignore
+ * @property {Array.<string>} source
+ */
+
 import repeat from 'repeat-string'
 import {toString} from 'nlcst-to-string'
 import {pointStart, pointEnd} from 'unist-util-position'
 import vfileLocation from 'vfile-location'
 
-// Transform a `tree` in mdast to nlcst.
-export function toNlcst(tree, file, Parser, options) {
-  var settings = options || {}
+/**
+ * Transform a `tree` in mdast to nlcst.
+ *
+ * @param {Node} tree
+ * @param {VFile} file
+ * @param {ParserInstance|ParserConstructor} Parser
+ * @param {Options} [options]
+ */
+export function toNlcst(tree, file, Parser, options = {}) {
+  /** @type {ParserInstance} */
   var parser
 
-  // Warn for invalid parameters.
+  // Crash on invalid parameters.
   if (!tree || !tree.type) {
     throw new Error('mdast-util-to-nlcst expected node')
   }
@@ -45,18 +79,26 @@ export function toNlcst(tree, file, Parser, options) {
           'table',
           'tableRow',
           'tableCell',
-          settings.ignore || []
+          options.ignore || []
         ),
-        source: [].concat('inlineCode', settings.source || [])
+        source: [].concat('inlineCode', options.source || [])
       },
+      // @ts-ignore assume mdast node.
       tree
     )
   )
 }
 
-// Transform a single node.
+/**
+ * Transform a single node.
+ * @param {Context} config
+ * @param {Content} node
+ * @returns {Array.<Node>|undefined}
+ */
 function one(config, node) {
+  /** @type {number} */
   var start
+  /** @type {number} */
   var end
 
   if (!config.ignore.includes(node.type)) {
@@ -73,7 +115,8 @@ function one(config, node) {
       )
     }
 
-    if (node.children) {
+    if ('children' in node) {
+      // @ts-ignore looks like a parent.
       return all(config, node)
     }
 
@@ -86,22 +129,37 @@ function one(config, node) {
     }
 
     // To do: next major — remove `escape`.
-    if (node.type === 'text' || node.type === 'escape') {
+    if (
+      node.type === 'text' ||
+      // @ts-ignore legacy.
+      node.type === 'escape'
+    ) {
       return patch(config, config.parser.tokenize(node.value), start)
     }
   }
 }
 
-// Transform all nodes in `parent`.
+/**
+ * Transform all nodes in `parent`.
+ * @param {Context} config
+ * @param {Parent} parent
+ * @returns {Array.<Node>}
+ */
 function all(config, parent) {
+  /** @type {Array.<Node>} */
   var result = []
   var index = -1
+  /** @type {Node} */
   var lineEnding
+  /** @type {Content} */
   var child
+  /** @type {Point} */
   var end
+  /** @type {Point} */
   var start
 
   while (++index < parent.children.length) {
+    // @ts-ignore Assume `parent` is an mdast parent.
     child = parent.children[index]
     start = pointStart(child)
 
@@ -111,7 +169,11 @@ function all(config, parent) {
       )
       patch(config, [lineEnding], end.offset)
 
-      if (lineEnding.value.length < 2) {
+      if (
+        'value' in lineEnding &&
+        typeof lineEnding.value === 'string' &&
+        lineEnding.value.length < 2
+      ) {
         lineEnding.value = '\n\n'
       }
 
@@ -125,18 +187,29 @@ function all(config, parent) {
   return result
 }
 
-// Patch a position on each node in `nodes`.
-// `offset` is the offset in `file` this run of content starts at.
+/**
+ * Patch a position on each node in `nodes`.
+ * `offset` is the offset in `file` this run of content starts at.
+ *
+ * @template {Array.<Node>} T
+ * @param {Context} config
+ * @param {T} nodes
+ * @param {number} offset
+ * @returns {T}
+ */
 function patch(config, nodes, offset) {
   var index = -1
   var start = offset
+  /** @type {number} */
   var end
+  /** @type {Node} */
   var node
 
   while (++index < nodes.length) {
     node = nodes[index]
 
-    if (node.children) {
+    if ('children' in node) {
+      // @ts-ignore looks like a parent.
       patch(config, node.children, start)
     }
 

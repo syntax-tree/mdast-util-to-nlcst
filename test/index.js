@@ -1,3 +1,8 @@
+/**
+ * @typedef {import('unist').Node} Node
+ * @typedef {import('vfile').VFile} VFile
+ */
+
 import fs from 'fs'
 import path from 'path'
 import test from 'tape'
@@ -14,6 +19,7 @@ import {toNlcst} from '../index.js'
 test('mdast-util-to-nlcst', function (t) {
   t.throws(
     function () {
+      // @ts-ignore runtime.
       toNlcst()
     },
     /mdast-util-to-nlcst expected node/,
@@ -22,6 +28,7 @@ test('mdast-util-to-nlcst', function (t) {
 
   t.throws(
     function () {
+      // @ts-ignore runtime.
       toNlcst({})
     },
     /mdast-util-to-nlcst expected node/,
@@ -30,6 +37,7 @@ test('mdast-util-to-nlcst', function (t) {
 
   t.throws(
     function () {
+      // @ts-ignore runtime.
       toNlcst({type: 'foo'})
     },
     /mdast-util-to-nlcst expected file/,
@@ -38,6 +46,7 @@ test('mdast-util-to-nlcst', function (t) {
 
   t.throws(
     function () {
+      // @ts-ignore runtime.
       toNlcst({type: 'foo'})
     },
     /mdast-util-to-nlcst expected file/,
@@ -46,6 +55,7 @@ test('mdast-util-to-nlcst', function (t) {
 
   t.throws(
     function () {
+      // @ts-ignore runtime.
       toNlcst({type: 'text', value: 'foo'}, {foo: 'bar'})
     },
     /mdast-util-to-nlcst expected file/,
@@ -54,6 +64,7 @@ test('mdast-util-to-nlcst', function (t) {
 
   t.throws(
     function () {
+      // @ts-ignore runtime.
       toNlcst({type: 'text', value: 'foo'}, vfile({contents: 'foo'}))
     },
     /mdast-util-to-nlcst expected parser/,
@@ -98,6 +109,7 @@ test('mdast-util-to-nlcst', function (t) {
         {
           type: 'text',
           value: 'foo',
+          // @ts-ignore runtime.
           position: {start: {}, end: {}}
         },
         vfile(),
@@ -132,10 +144,15 @@ test('Fixtures', function (t) {
   var base = path.join('test', 'fixtures')
   var files = fs.readdirSync(base)
   var index = -1
+  /** @type {string} */
   var name
+  /** @type {VFile} */
   var input
+  /** @type {Node} */
   var expected
+  /** @type {Node} */
   var mdast
+  /** @type {Object.<string, unknown>} */
   var options
 
   while (++index < files.length) {
@@ -151,12 +168,12 @@ test('Fixtures', function (t) {
         vfile.readSync(path.join(base, name, 'options.json'))
       )
     } catch {
-      options = null
+      options = undefined
     }
 
     mdast = remark()
-      .use(options && options.useRemarkGfm ? gfm : [])
-      .use(options && options.useRemarkFrontmatter ? frontmatter : [])
+      .use(options && options.useRemarkGfm ? gfm : undefined)
+      .use(options && options.useRemarkFrontmatter ? frontmatter : undefined)
       .parse(input)
 
     t.deepEqual(
