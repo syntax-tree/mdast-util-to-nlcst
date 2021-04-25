@@ -10,8 +10,7 @@ var vfile = require('to-vfile')
 var Latin = require('parse-latin')
 var Dutch = require('parse-dutch')
 var English = require('parse-english')
-var negate = require('negate')
-var hidden = require('is-hidden')
+var isHidden = require('is-hidden')
 var toNlcst = require('..')
 
 test('mdast-util-to-nlcst', function (t) {
@@ -133,31 +132,41 @@ test('mdast-util-to-nlcst', function (t) {
 
 test('Fixtures', function (t) {
   var base = path.join(__dirname, 'fixtures')
+  var files = fs.readdirSync(base)
+  var index = -1
+  var name
+  var input
+  var expected
+  var mdast
+  var options
 
-  fs.readdirSync(base)
-    .filter(negate(hidden))
-    .forEach(function (name) {
-      var input = vfile.readSync(path.join(base, name, 'input.md'))
-      var expected = JSON.parse(
-        vfile.readSync(path.join(base, name, 'output.json'))
+  while (++index < files.length) {
+    name = files[index]
+
+    if (isHidden(name)) continue
+
+    input = vfile.readSync(path.join(base, name, 'input.md'))
+    expected = JSON.parse(vfile.readSync(path.join(base, name, 'output.json')))
+
+    try {
+      options = JSON.parse(
+        vfile.readSync(path.join(base, name, 'options.json'))
       )
-      var options
+    } catch (_) {
+      options = null
+    }
 
-      try {
-        options = JSON.parse(
-          vfile.readSync(path.join(base, name, 'options.json'))
-        )
-      } catch (_) {}
+    mdast = remark()
+      .use(options && options.useRemarkGfm ? gfm : [])
+      .use(options && options.useRemarkFrontmatter ? frontmatter : [])
+      .parse(input)
 
-      var mdast = remark()
-        .use(options && options.useRemarkGfm ? gfm : [])
-        .use(options && options.useRemarkFrontmatter ? frontmatter : [])
-        .parse(input)
-
-      var actual = toNlcst(mdast, input, Latin, options)
-
-      t.deepEqual(actual, expected, 'should work on `' + name + '`')
-    })
+    t.deepEqual(
+      toNlcst(mdast, input, Latin, options),
+      expected,
+      'should work on `' + name + '`'
+    )
+  }
 
   t.end()
 })
