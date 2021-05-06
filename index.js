@@ -4,7 +4,7 @@
  * @typedef {import('unist').Point} Point
  * @typedef {import('mdast').Content} Content
  * @typedef {import('vfile').VFile} VFile
- * @typedef {import('vfile-location').Location} LocationInterface
+ * @typedef {ReturnType<import('vfile-location').location>} Location
  * @typedef {{
  *   parse(nodes: Node[]): Node
  *   tokenizeSource(value: string): Node
@@ -19,7 +19,7 @@
  *
  * @typedef Context
  * @property {string} doc
- * @property {LocationInterface} location
+ * @property {Location} place
  * @property {ParserInstance} parser
  * @property {Array.<string>} ignore
  * @property {Array.<string>} source
@@ -28,7 +28,7 @@
 import repeat from 'repeat-string'
 import {toString} from 'nlcst-to-string'
 import {pointStart, pointEnd} from 'unist-util-position'
-import vfileLocation from 'vfile-location'
+import {location} from 'vfile-location'
 
 /**
  * Transform a `tree` in mdast to nlcst.
@@ -73,7 +73,7 @@ export function toNlcst(tree, file, Parser, options = {}) {
     one(
       {
         doc: String(file),
-        location: vfileLocation(file),
+        place: location(file),
         parser,
         ignore: [].concat(
           'table',
@@ -210,8 +210,8 @@ function patch(config, nodes, offset) {
     end = start + toString(node).length
 
     node.position = {
-      start: config.location.toPoint(start),
-      end: config.location.toPoint(end)
+      start: config.place.toPoint(start),
+      end: config.place.toPoint(end)
     }
 
     start = end

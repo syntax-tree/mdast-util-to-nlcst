@@ -9,7 +9,7 @@ import test from 'tape'
 import remark from 'remark'
 import gfm from 'remark-gfm'
 import frontmatter from 'remark-frontmatter'
-import vfile from 'to-vfile'
+import {toVFile as vfile} from 'to-vfile'
 import {ParseLatin} from 'parse-latin'
 import {ParseDutch} from 'parse-dutch'
 import {ParseEnglish} from 'parse-english'
@@ -144,11 +144,13 @@ test('Fixtures', function (t) {
     if (isHidden(name)) continue
 
     input = vfile.readSync(path.join(base, name, 'input.md'))
-    expected = JSON.parse(vfile.readSync(path.join(base, name, 'output.json')))
+    expected = JSON.parse(
+      String(vfile.readSync(path.join(base, name, 'output.json')))
+    )
 
     try {
       options = JSON.parse(
-        vfile.readSync(path.join(base, name, 'options.json'))
+        String(vfile.readSync(path.join(base, name, 'options.json')))
       )
     } catch {
       options = undefined

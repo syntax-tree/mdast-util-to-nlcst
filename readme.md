@@ -26,13 +26,13 @@ npm install mdast-util-to-nlcst
 ## Use
 
 ```js
-import vfile from 'vfile'
+import {VFile} from 'vfile'
 import {ParseEnglish} from 'parse-english'
 import {inspect} from 'unist-util-inspect'
 import fromMarkdown from 'mdast-util-from-markdown'
 import {toNlcst} from 'mdast-util-to-nlcst'
 
-var file = vfile('Some *foo*sball.')
+var file = new VFile('Some *foo*sball.')
 var mdast = fromMarkdown(file)
 var nlcst = toNlcst(mdast, file, ParseEnglish)
 
