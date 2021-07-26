@@ -17,9 +17,9 @@ import {ParseEnglish} from 'parse-english'
 import {isHidden} from 'is-hidden'
 import {toNlcst} from '../index.js'
 
-test('mdast-util-to-nlcst', function (t) {
+test('mdast-util-to-nlcst', (t) => {
   t.throws(
-    function () {
+    () => {
       // @ts-ignore runtime.
       toNlcst()
     },
@@ -28,7 +28,7 @@ test('mdast-util-to-nlcst', function (t) {
   )
 
   t.throws(
-    function () {
+    () => {
       // @ts-ignore runtime.
       toNlcst({})
     },
@@ -37,7 +37,7 @@ test('mdast-util-to-nlcst', function (t) {
   )
 
   t.throws(
-    function () {
+    () => {
       // @ts-ignore runtime.
       toNlcst({type: 'foo'})
     },
@@ -46,7 +46,7 @@ test('mdast-util-to-nlcst', function (t) {
   )
 
   t.throws(
-    function () {
+    () => {
       // @ts-ignore runtime.
       toNlcst({type: 'foo'})
     },
@@ -55,7 +55,7 @@ test('mdast-util-to-nlcst', function (t) {
   )
 
   t.throws(
-    function () {
+    () => {
       // @ts-ignore runtime.
       toNlcst({type: 'text', value: 'foo'}, {foo: 'bar'})
     },
@@ -64,7 +64,7 @@ test('mdast-util-to-nlcst', function (t) {
   )
 
   t.throws(
-    function () {
+    () => {
       // @ts-ignore runtime.
       toNlcst({type: 'text', value: 'foo'}, vfile({contents: 'foo'}))
     },
@@ -73,7 +73,7 @@ test('mdast-util-to-nlcst', function (t) {
   )
 
   t.throws(
-    function () {
+    () => {
       toNlcst(
         /** @type {Literal} */ ({type: 'text', value: 'foo'}),
         vfile(),
@@ -84,7 +84,7 @@ test('mdast-util-to-nlcst', function (t) {
     'should fail when not given positional information'
   )
 
-  t.doesNotThrow(function () {
+  t.doesNotThrow(() => {
     toNlcst(
       /** @type {Literal} */ ({
         type: 'text',
@@ -96,7 +96,7 @@ test('mdast-util-to-nlcst', function (t) {
     )
   }, 'should accept a parser constructor')
 
-  t.doesNotThrow(function () {
+  t.doesNotThrow(() => {
     toNlcst(
       /** @type {Literal} */ ({
         type: 'text',
@@ -109,7 +109,7 @@ test('mdast-util-to-nlcst', function (t) {
   }, 'should accept a parser instance')
 
   t.throws(
-    function () {
+    () => {
       toNlcst(
         {
           type: 'text',
@@ -128,20 +128,20 @@ test('mdast-util-to-nlcst', function (t) {
   t.end()
 })
 
-test('Fixtures', function (t) {
-  var base = path.join('test', 'fixtures')
-  var files = fs.readdirSync(base)
-  var index = -1
+test('Fixtures', (t) => {
+  const base = path.join('test', 'fixtures')
+  const files = fs.readdirSync(base)
+  let index = -1
   /** @type {string} */
-  var name
+  let name
   /** @type {VFile} */
-  var input
+  let input
   /** @type {Node} */
-  var expected
+  let expected
   /** @type {Node} */
-  var mdast
+  let mdast
   /** @type {Object.<string, unknown>} */
-  var options
+  let options
 
   while (++index < files.length) {
     name = files[index]

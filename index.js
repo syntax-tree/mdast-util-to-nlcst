@@ -40,9 +40,6 @@ import {location} from 'vfile-location'
  * @param {Options} [options]
  */
 export function toNlcst(tree, file, Parser, options = {}) {
-  /** @type {ParserInstance} */
-  var parser
-
   // Crash on invalid parameters.
   if (!tree || !tree.type) {
     throw new Error('mdast-util-to-nlcst expected node')
@@ -66,7 +63,7 @@ export function toNlcst(tree, file, Parser, options = {}) {
     throw new Error('mdast-util-to-nlcst expected position on nodes')
   }
 
-  parser = 'parse' in Parser ? Parser : new Parser()
+  const parser = 'parse' in Parser ? Parser : new Parser()
 
   // Transform mdast into nlcst tokens, and pass these into `parser.parse` to
   // insert sentences, paragraphs where needed.
@@ -98,7 +95,7 @@ export function toNlcst(tree, file, Parser, options = {}) {
  */
 function one(config, node) {
   /** @type {number} */
-  var start
+  let start
 
   if (!config.ignore.includes(node.type)) {
     start = node.position.start.offset
@@ -141,25 +138,20 @@ function one(config, node) {
  * @returns {Array.<Node>}
  */
 function all(config, parent) {
+  let index = -1
   /** @type {Array.<Node>} */
-  var result = []
-  var index = -1
-  /** @type {Node} */
-  var lineEnding
-  /** @type {Content} */
-  var child
+  const results = []
   /** @type {Point} */
-  var end
-  /** @type {Point} */
-  var start
+  let end
 
   while (++index < parent.children.length) {
+    /** @type {Content} */
     // @ts-ignore Assume `parent` is an mdast parent.
-    child = parent.children[index]
-    start = pointStart(child)
+    const child = parent.children[index]
+    const start = pointStart(child)
 
     if (end && start.line !== end.line) {
-      lineEnding = config.parser.tokenizeWhiteSpace(
+      const lineEnding = config.parser.tokenizeWhiteSpace(
         repeat('\n', start.line - end.line)
       )
       patch(config, [lineEnding], end.offset)
@@ -168,14 +160,15 @@ function all(config, parent) {
         lineEnding.value = '\n\n'
       }
 
-      result.push(lineEnding)
+      results.push(lineEnding)
     }
 
-    result = result.concat(one(config, child) || [])
+    const result = one(config, child)
+    if (result) results.push(...result)
     end = pointEnd(child)
   }
 
-  return result
+  return results
 }
 
 /**
@@ -189,22 +182,18 @@ function all(config, parent) {
  * @returns {T}
  */
 function patch(config, nodes, offset) {
-  var index = -1
-  var start = offset
-  /** @type {number} */
-  var end
-  /** @type {Node} */
-  var node
+  let index = -1
+  let start = offset
 
   while (++index < nodes.length) {
-    node = nodes[index]
+    const node = nodes[index]
 
     if ('children' in node) {
       // @ts-ignore looks like a parent.
       patch(config, node.children, start)
     }
 
-    end = start + toString(node).length
+    const end = start + toString(node).length
 
     node.position = {
       start: config.place.toPoint(start),

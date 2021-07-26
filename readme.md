@@ -32,9 +32,9 @@ import {inspect} from 'unist-util-inspect'
 import fromMarkdown from 'mdast-util-from-markdown'
 import {toNlcst} from 'mdast-util-to-nlcst'
 
-var file = new VFile('Some *foo*sball.')
-var mdast = fromMarkdown(file)
-var nlcst = toNlcst(mdast, file, ParseEnglish)
+const file = new VFile('Some *foo*sball.')
+const mdast = fromMarkdown(file)
+const nlcst = toNlcst(mdast, file, ParseEnglish)
 
 console.log(inspect(nlcst))
 ```
