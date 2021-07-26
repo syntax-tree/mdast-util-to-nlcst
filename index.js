@@ -26,7 +26,6 @@
  * @property {Array.<string>} source
  */
 
-import repeat from 'repeat-string'
 import {toString} from 'nlcst-to-string'
 import {pointStart, pointEnd} from 'unist-util-position'
 import {location} from 'vfile-location'
@@ -154,7 +153,7 @@ function all(config, parent) {
 
     if (end && start.line !== end.line) {
       const lineEnding = config.parser.tokenizeWhiteSpace(
-        repeat('\n', start.line - end.line)
+        '\n'.repeat(start.line - end.line)
       )
       patch(config, [lineEnding], end.offset)
 
