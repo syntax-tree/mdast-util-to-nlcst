@@ -1,16 +1,18 @@
 /**
- * @typedef {import('unist').Node} Node
- * @typedef {import('unist').Literal<string>} Literal
- * @typedef {import('unist').Parent} Parent
  * @typedef {import('unist').Point} Point
- * @typedef {import('mdast').Content} Content
+ * @typedef {import('unist').Literal<string>} UnistLiteral
+ * @typedef {import('unist').Parent} UnistParent
+ * @typedef {import('unist').Node} UnistNode
+ * @typedef {import('mdast').Root} MdastRoot
+ * @typedef {import('mdast').Content} MdastContent
+ * @typedef {MdastRoot|MdastContent} MdastNode
  * @typedef {import('vfile').VFile} VFile
  * @typedef {ReturnType<import('vfile-location').location>} Location
  * @typedef {{
- *   parse(nodes: Node[]): Node
- *   tokenizeSource(value: string): Node
- *   tokenizeWhiteSpace(value: string): Node
- *   tokenize(value: string): Node[]
+ *   parse(nodes: UnistNode[]): UnistNode
+ *   tokenizeSource(value: string): UnistNode
+ *   tokenizeWhiteSpace(value: string): UnistNode
+ *   tokenize(value: string): UnistNode[]
  * }} ParserInstance
  * @typedef {new () => ParserInstance} ParserConstructor
  *
@@ -36,7 +38,7 @@ const defaultSource = ['inlineCode']
 /**
  * Transform a `tree` in mdast to nlcst.
  *
- * @param {Node} tree
+ * @param {MdastNode} tree
  * @param {VFile} file
  * @param {ParserInstance|ParserConstructor} Parser
  * @param {Options} [options]
@@ -79,7 +81,6 @@ export function toNlcst(tree, file, Parser, options = {}) {
         ? defaultSource.concat(options.source)
         : defaultSource
     },
-    // @ts-expect-error assume mdast node.
     tree
   )
 
@@ -91,8 +92,8 @@ export function toNlcst(tree, file, Parser, options = {}) {
 /**
  * Transform a single node.
  * @param {Context} config
- * @param {Content} node
- * @returns {Array.<Node>|undefined}
+ * @param {MdastNode} node
+ * @returns {Array.<UnistNode>|undefined}
  */
 function one(config, node) {
   const start = node.position ? node.position.start.offset : undefined
@@ -135,18 +136,18 @@ function one(config, node) {
 /**
  * Transform all nodes in `parent`.
  * @param {Context} config
- * @param {Parent} parent
- * @returns {Array.<Node>}
+ * @param {UnistParent} parent
+ * @returns {Array.<UnistNode>}
  */
 function all(config, parent) {
   let index = -1
-  /** @type {Array.<Node>} */
+  /** @type {Array.<UnistNode>} */
   const results = []
   /** @type {Point|undefined} */
   let end
 
   while (++index < parent.children.length) {
-    /** @type {Content} */
+    /** @type {MdastContent} */
     // @ts-expect-error Assume `parent` is an mdast parent.
     const child = parent.children[index]
     const start = pointStart(child)
@@ -176,7 +177,7 @@ function all(config, parent) {
  * Patch a position on each node in `nodes`.
  * `offset` is the offset in `file` this run of content starts at.
  *
- * @template {Array.<Node>} T
+ * @template {Array.<UnistNode>} T
  * @param {Context} config
  * @param {T} nodes
  * @param {number|undefined} offset
@@ -189,8 +190,7 @@ function patch(config, nodes, offset) {
   while (++index < nodes.length) {
     const node = nodes[index]
 
-    if ('children' in node) {
-      // @ts-expect-error looks like a parent.
+    if (parent(node)) {
       patch(config, node.children, start)
     }
 
@@ -212,9 +212,17 @@ function patch(config, nodes, offset) {
 }
 
 /**
- * @param {Node} node
- * @returns {node is Literal}
+ * @param {UnistNode} node
+ * @returns {node is UnistLiteral}
  */
 function literal(node) {
   return 'value' in node
+}
+
+/**
+ * @param {UnistNode} node
+ * @returns {node is UnistParent}
+ */
+function parent(node) {
+  return 'children' in node
 }

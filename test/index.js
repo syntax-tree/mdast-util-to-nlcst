@@ -2,6 +2,7 @@
  * @typedef {import('unist').Node} Node
  * @typedef {import('unist').Literal<string>} Literal
  * @typedef {import('mdast').Root} Root
+ * @typedef {import('mdast').Text} Text
  * @typedef {import('mdast').InlineCode} InlineCode
  * @typedef {import('vfile').VFile} VFile
  */
@@ -25,7 +26,7 @@ import {toNlcst} from '../index.js'
 test('mdast-util-to-nlcst', (t) => {
   t.throws(
     () => {
-      // @ts-expect-error runtime.
+      // @ts-expect-error runtime: too few arguments.
       toNlcst()
     },
     /mdast-util-to-nlcst expected node/,
@@ -34,7 +35,7 @@ test('mdast-util-to-nlcst', (t) => {
 
   t.throws(
     () => {
-      // @ts-expect-error runtime.
+      // @ts-expect-error runtime: too few arguments.
       toNlcst({})
     },
     /mdast-util-to-nlcst expected node/,
@@ -43,7 +44,7 @@ test('mdast-util-to-nlcst', (t) => {
 
   t.throws(
     () => {
-      // @ts-expect-error runtime.
+      // @ts-expect-error runtime: too few arguments.
       toNlcst({type: 'foo'})
     },
     /mdast-util-to-nlcst expected file/,
@@ -52,7 +53,7 @@ test('mdast-util-to-nlcst', (t) => {
 
   t.throws(
     () => {
-      // @ts-expect-error runtime.
+      // @ts-expect-error runtime: too few arguments.
       toNlcst({type: 'foo'})
     },
     /mdast-util-to-nlcst expected file/,
@@ -61,7 +62,7 @@ test('mdast-util-to-nlcst', (t) => {
 
   t.throws(
     () => {
-      // @ts-expect-error runtime.
+      // @ts-expect-error runtime: too few arguments.
       toNlcst({type: 'text', value: 'foo'}, {foo: 'bar'})
     },
     /mdast-util-to-nlcst expected file/,
@@ -70,9 +71,9 @@ test('mdast-util-to-nlcst', (t) => {
 
   t.throws(
     () => {
-      // @ts-expect-error runtime.
+      // @ts-expect-error runtime: too few arguments.
       toNlcst(
-        /** @type {Literal} */ ({type: 'text', value: 'foo'}),
+        /** @type {Text} */ ({type: 'text', value: 'foo'}),
         vfile({contents: 'foo'})
       )
     },
@@ -83,7 +84,7 @@ test('mdast-util-to-nlcst', (t) => {
   t.throws(
     () => {
       toNlcst(
-        /** @type {Literal} */ ({type: 'text', value: 'foo'}),
+        /** @type {Text} */ ({type: 'text', value: 'foo'}),
         vfile(),
         ParseLatin
       )
@@ -94,7 +95,7 @@ test('mdast-util-to-nlcst', (t) => {
 
   t.doesNotThrow(() => {
     toNlcst(
-      /** @type {Literal} */ ({
+      /** @type {Text} */ ({
         type: 'text',
         value: 'foo',
         position: {start: {line: 1, column: 1}, end: {line: 1, column: 4}}
@@ -106,7 +107,7 @@ test('mdast-util-to-nlcst', (t) => {
 
   t.doesNotThrow(() => {
     toNlcst(
-      /** @type {Literal} */ ({
+      /** @type {Text} */ ({
         type: 'text',
         value: 'foo',
         position: {start: {line: 1, column: 1}, end: {line: 1, column: 4}}
@@ -122,7 +123,7 @@ test('mdast-util-to-nlcst', (t) => {
         {
           type: 'text',
           value: 'foo',
-          // @ts-expect-error runtime.
+          // @ts-expect-error runtime: incorrect positional info.
           position: {start: {}, end: {}}
         },
         vfile(),
@@ -225,24 +226,17 @@ test('Fixtures', (t) => {
   const base = path.join('test', 'fixtures')
   const files = fs.readdirSync(base)
   let index = -1
-  /** @type {string} */
-  let name
-  /** @type {VFile} */
-  let input
-  /** @type {Node} */
-  let expected
-  /** @type {Node} */
-  let mdast
-  /** @type {Object.<string, unknown>|undefined} */
-  let options
 
   while (++index < files.length) {
-    name = files[index]
+    const name = files[index]
+    /** @type {Object.<string, unknown>|undefined} */
+    let options
 
     if (isHidden(name)) continue
 
-    input = vfile.readSync(path.join(base, name, 'input.md'))
-    expected = JSON.parse(
+    const input = vfile.readSync(path.join(base, name, 'input.md'))
+    /** @type {Node} */
+    const expected = JSON.parse(
       String(vfile.readSync(path.join(base, name, 'output.json')))
     )
 
@@ -250,15 +244,12 @@ test('Fixtures', (t) => {
       options = JSON.parse(
         String(vfile.readSync(path.join(base, name, 'options.json')))
       )
-    } catch {
-      options = undefined
-    }
+    } catch {}
 
     const processor = remark()
     if (options && options.useRemarkGfm) processor.use(gfm)
     if (options && options.useRemarkFrontmatter) processor.use(frontmatter)
-
-    mdast = processor.parse(input)
+    const mdast = /** @type {Root} */ (processor.parse(input))
 
     t.deepEqual(
       toNlcst(mdast, input, ParseLatin, options),
