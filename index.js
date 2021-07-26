@@ -31,6 +31,9 @@ import {toString} from 'nlcst-to-string'
 import {pointStart, pointEnd} from 'unist-util-position'
 import {location} from 'vfile-location'
 
+const defaultIgnore = ['table', 'tableRow', 'tableCell']
+const defaultSource = ['inlineCode']
+
 /**
  * Transform a `tree` in mdast to nlcst.
  *
@@ -65,26 +68,25 @@ export function toNlcst(tree, file, Parser, options = {}) {
 
   const parser = 'parse' in Parser ? Parser : new Parser()
 
+  const result = one(
+    {
+      doc: String(file),
+      place: location(file),
+      parser,
+      ignore: options.ignore
+        ? defaultIgnore.concat(options.ignore)
+        : defaultIgnore,
+      source: options.source
+        ? defaultSource.concat(options.source)
+        : defaultSource
+    },
+    // @ts-expect-error assume mdast node.
+    tree
+  )
+
   // Transform mdast into nlcst tokens, and pass these into `parser.parse` to
   // insert sentences, paragraphs where needed.
-  return parser.parse(
-    one(
-      {
-        doc: String(file),
-        place: location(file),
-        parser,
-        ignore: [].concat(
-          'table',
-          'tableRow',
-          'tableCell',
-          options.ignore || []
-        ),
-        source: [].concat('inlineCode', options.source || [])
-      },
-      // @ts-ignore assume mdast node.
-      tree
-    )
-  )
+  return parser.parse(result || [])
 }
 
 /**
@@ -94,13 +96,10 @@ export function toNlcst(tree, file, Parser, options = {}) {
  * @returns {Array.<Node>|undefined}
  */
 function one(config, node) {
-  /** @type {number} */
-  let start
+  const start = node.position ? node.position.start.offset : undefined
 
   if (!config.ignore.includes(node.type)) {
-    start = node.position.start.offset
-
-    if (config.source.includes(node.type)) {
+    if (config.source.includes(node.type) && start && node.position) {
       return patch(
         config,
         [
@@ -113,12 +112,15 @@ function one(config, node) {
     }
 
     if ('children' in node) {
-      // @ts-ignore looks like a parent.
       return all(config, node)
     }
 
-    if (node.type === 'image' || node.type === 'imageReference') {
-      return patch(config, config.parser.tokenize(node.alt), start + 2)
+    if ((node.type === 'image' || node.type === 'imageReference') && node.alt) {
+      return patch(
+        config,
+        config.parser.tokenize(node.alt),
+        typeof start === 'number' ? start + 2 : undefined
+      )
     }
 
     if (node.type === 'break') {
@@ -141,12 +143,12 @@ function all(config, parent) {
   let index = -1
   /** @type {Array.<Node>} */
   const results = []
-  /** @type {Point} */
+  /** @type {Point|undefined} */
   let end
 
   while (++index < parent.children.length) {
     /** @type {Content} */
-    // @ts-ignore Assume `parent` is an mdast parent.
+    // @ts-expect-error Assume `parent` is an mdast parent.
     const child = parent.children[index]
     const start = pointStart(child)
 
@@ -178,7 +180,7 @@ function all(config, parent) {
  * @template {Array.<Node>} T
  * @param {Context} config
  * @param {T} nodes
- * @param {number} offset
+ * @param {number|undefined} offset
  * @returns {T}
  */
 function patch(config, nodes, offset) {
@@ -189,16 +191,20 @@ function patch(config, nodes, offset) {
     const node = nodes[index]
 
     if ('children' in node) {
-      // @ts-ignore looks like a parent.
+      // @ts-expect-error looks like a parent.
       patch(config, node.children, start)
     }
 
-    const end = start + toString(node).length
+    const end =
+      typeof start === 'number' ? start + toString(node).length : undefined
 
-    node.position = {
-      start: config.place.toPoint(start),
-      end: config.place.toPoint(end)
-    }
+    node.position =
+      start !== undefined && end !== undefined
+        ? {
+            start: config.place.toPoint(start),
+            end: config.place.toPoint(end)
+          }
+        : undefined
 
     start = end
   }
