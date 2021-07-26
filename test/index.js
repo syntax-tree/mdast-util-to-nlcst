@@ -1,5 +1,6 @@
 /**
  * @typedef {import('unist').Node} Node
+ * @typedef {import('unist').Literal<string>} Literal
  * @typedef {import('vfile').VFile} VFile
  */
 
@@ -73,7 +74,11 @@ test('mdast-util-to-nlcst', function (t) {
 
   t.throws(
     function () {
-      toNlcst({type: 'text', value: 'foo'}, vfile(), ParseLatin)
+      toNlcst(
+        /** @type {Literal} */ ({type: 'text', value: 'foo'}),
+        vfile(),
+        ParseLatin
+      )
     },
     /mdast-util-to-nlcst expected position on nodes/,
     'should fail when not given positional information'
@@ -81,11 +86,11 @@ test('mdast-util-to-nlcst', function (t) {
 
   t.doesNotThrow(function () {
     toNlcst(
-      {
+      /** @type {Literal} */ ({
         type: 'text',
         value: 'foo',
         position: {start: {line: 1, column: 1}, end: {line: 1, column: 4}}
-      },
+      }),
       vfile(),
       ParseEnglish
     )
@@ -93,11 +98,11 @@ test('mdast-util-to-nlcst', function (t) {
 
   t.doesNotThrow(function () {
     toNlcst(
-      {
+      /** @type {Literal} */ ({
         type: 'text',
         value: 'foo',
         position: {start: {line: 1, column: 1}, end: {line: 1, column: 4}}
-      },
+      }),
       vfile(),
       new ParseDutch()
     )

@@ -1,5 +1,6 @@
 /**
  * @typedef {import('unist').Node} Node
+ * @typedef {import('unist').Literal<string>} Literal
  * @typedef {import('unist').Parent} Parent
  * @typedef {import('unist').Point} Point
  * @typedef {import('mdast').Content} Content
@@ -163,11 +164,7 @@ function all(config, parent) {
       )
       patch(config, [lineEnding], end.offset)
 
-      if (
-        'value' in lineEnding &&
-        typeof lineEnding.value === 'string' &&
-        lineEnding.value.length < 2
-      ) {
+      if (literal(lineEnding) && lineEnding.value.length < 2) {
         lineEnding.value = '\n\n'
       }
 
@@ -218,4 +215,12 @@ function patch(config, nodes, offset) {
   }
 
   return nodes
+}
+
+/**
+ * @param {Node} node
+ * @returns {node is Literal}
+ */
+function literal(node) {
+  return 'value' in node
 }
