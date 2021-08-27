@@ -10,9 +10,9 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import test from 'tape'
-import remark from 'remark'
-import gfm from 'remark-gfm'
-import frontmatter from 'remark-frontmatter'
+import {remark} from 'remark'
+import remarkGfm from 'remark-gfm'
+import remarkFrontmatter from 'remark-frontmatter'
 import {toVFile as vfile} from 'to-vfile'
 // @ts-expect-error: to do type.
 import {ParseLatin} from 'parse-latin'
@@ -247,8 +247,9 @@ test('Fixtures', (t) => {
     } catch {}
 
     const processor = remark()
-    if (options && options.useRemarkGfm) processor.use(gfm)
-    if (options && options.useRemarkFrontmatter) processor.use(frontmatter)
+    if (options && options.useRemarkGfm) processor.use(remarkGfm)
+    if (options && options.useRemarkFrontmatter)
+      processor.use(remarkFrontmatter)
     const mdast = /** @type {Root} */ (processor.parse(input))
 
     t.deepEqual(
