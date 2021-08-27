@@ -35,6 +35,7 @@
   ],
   "dependencies": {
     "@types/mdast": "^3.0.0",
+    "@types/nlcst": "^1.0.0",
     "@types/unist": "^2.0.0",
     "nlcst-to-string": "^3.0.0",
     "unist-util-position": "^4.0.0",

@@ -1,31 +1,39 @@
 /**
  * @typedef {import('unist').Point} Point
- * @typedef {import('unist').Literal<string>} UnistLiteral
- * @typedef {import('unist').Parent} UnistParent
- * @typedef {import('unist').Node} UnistNode
+ *
+ * @typedef {import('nlcst').Root} NlcstRoot
+ * @typedef {import('nlcst').Content} NlcstContent
+ * @typedef {import('nlcst').SentenceContent} NlcstSentenceContent
+ * @typedef {import('nlcst').WhiteSpace} NlcstWhiteSpace
+ * @typedef {import('nlcst').Source} NlcstSource
+ * @typedef {NlcstRoot|NlcstContent} NlcstNode
+ *
  * @typedef {import('mdast').Root} MdastRoot
  * @typedef {import('mdast').Content} MdastContent
  * @typedef {MdastRoot|MdastContent} MdastNode
+ * @typedef {Extract<MdastNode, import('unist').Parent>} MdastParent
+ *
+ *
  * @typedef {import('vfile').VFile} VFile
  * @typedef {ReturnType<import('vfile-location').location>} Location
  * @typedef {{
- *   parse(nodes: UnistNode[]): UnistNode
- *   tokenizeSource(value: string): UnistNode
- *   tokenizeWhiteSpace(value: string): UnistNode
- *   tokenize(value: string): UnistNode[]
+ *   parse(nodes: NlcstContent[]): NlcstRoot
+ *   tokenizeSource(value: string): NlcstSource
+ *   tokenizeWhiteSpace(value: string): NlcstWhiteSpace
+ *   tokenize(value: string): NlcstSentenceContent[]
  * }} ParserInstance
  * @typedef {new () => ParserInstance} ParserConstructor
  *
  * @typedef Options
- * @property {Array.<string>} [ignore]
- * @property {Array.<string>} [source]
+ * @property {string[]} [ignore]
+ * @property {string[]} [source]
  *
  * @typedef Context
  * @property {string} doc
  * @property {Location} place
  * @property {ParserInstance} parser
- * @property {Array.<string>} ignore
- * @property {Array.<string>} source
+ * @property {string[]} ignore
+ * @property {string[]} source
  */
 
 import {toString} from 'nlcst-to-string'
@@ -93,7 +101,7 @@ export function toNlcst(tree, file, Parser, options = {}) {
  * Transform a single node.
  * @param {Context} config
  * @param {MdastNode} node
- * @returns {Array.<UnistNode>|undefined}
+ * @returns {NlcstContent[]|undefined}
  */
 function one(config, node) {
   const start = node.position ? node.position.start.offset : undefined
@@ -136,19 +144,17 @@ function one(config, node) {
 /**
  * Transform all nodes in `parent`.
  * @param {Context} config
- * @param {UnistParent} parent
- * @returns {Array.<UnistNode>}
+ * @param {MdastParent} parent
+ * @returns {NlcstContent[]}
  */
 function all(config, parent) {
   let index = -1
-  /** @type {Array.<UnistNode>} */
+  /** @type {NlcstContent[]} */
   const results = []
   /** @type {Point|undefined} */
   let end
 
   while (++index < parent.children.length) {
-    /** @type {MdastContent} */
-    // @ts-expect-error Assume `parent` is an mdast parent.
     const child = parent.children[index]
     const start = pointStart(child)
 
@@ -158,7 +164,7 @@ function all(config, parent) {
       )
       patch(config, [lineEnding], end.offset)
 
-      if (literal(lineEnding) && lineEnding.value.length < 2) {
+      if (lineEnding.value.length < 2) {
         lineEnding.value = '\n\n'
       }
 
@@ -177,7 +183,7 @@ function all(config, parent) {
  * Patch a position on each node in `nodes`.
  * `offset` is the offset in `file` this run of content starts at.
  *
- * @template {Array.<UnistNode>} T
+ * @template {NlcstContent[]} T
  * @param {Context} config
  * @param {T} nodes
  * @param {number|undefined} offset
@@ -190,7 +196,7 @@ function patch(config, nodes, offset) {
   while (++index < nodes.length) {
     const node = nodes[index]
 
-    if (parent(node)) {
+    if ('children' in node) {
       patch(config, node.children, start)
     }
 
@@ -209,20 +215,4 @@ function patch(config, nodes, offset) {
   }
 
   return nodes
-}
-
-/**
- * @param {UnistNode} node
- * @returns {node is UnistLiteral}
- */
-function literal(node) {
-  return 'value' in node
-}
-
-/**
- * @param {UnistNode} node
- * @returns {node is UnistParent}
- */
-function parent(node) {
-  return 'children' in node
 }
