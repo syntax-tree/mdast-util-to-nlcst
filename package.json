@@ -1,6 +1,6 @@
 {
   "name": "mdast-util-to-nlcst",
-  "version": "5.2.0",
+  "version": "5.2.1",
   "description": "mdast utility to transform to nlcst",
   "license": "MIT",
   "keywords": [
