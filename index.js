@@ -158,7 +158,12 @@ function all(config, parent) {
     const child = parent.children[index]
     const start = pointStart(child)
 
-    if (end && start.line !== end.line) {
+    if (
+      end &&
+      end.line !== null &&
+      start.line !== null &&
+      start.line !== end.line
+    ) {
       const lineEnding = config.parser.tokenizeWhiteSpace(
         '\n'.repeat(start.line - end.line)
       )
