@@ -198,7 +198,7 @@ RootNode[3] (1:1-3:32, 0-45)
 ## Types
 
 This package is fully typed with [TypeScript][].
-It exports the type `Options`.
+It exports the types `Options`, `ParserConstructor`, and `ParserInstance`.
 
 ## Compatibility
 
