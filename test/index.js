@@ -229,7 +229,7 @@ test('Fixtures', (t) => {
 
   while (++index < files.length) {
     const name = files[index]
-    /** @type {Object.<string, unknown>|undefined} */
+    /** @type {Record<string, unknown>|undefined} */
     let options
 
     if (isHidden(name)) continue

@@ -13,27 +13,26 @@
  * @typedef {MdastRoot|MdastContent} MdastNode
  * @typedef {Extract<MdastNode, import('unist').Parent>} MdastParent
  *
- *
  * @typedef {import('vfile').VFile} VFile
  * @typedef {ReturnType<import('vfile-location').location>} Location
  * @typedef {{
- *   parse(nodes: NlcstContent[]): NlcstRoot
+ *   parse(nodes: Array<NlcstContent>): NlcstRoot
  *   tokenizeSource(value: string): NlcstSource
  *   tokenizeWhiteSpace(value: string): NlcstWhiteSpace
- *   tokenize(value: string): NlcstSentenceContent[]
+ *   tokenize(value: string): Array<NlcstSentenceContent>
  * }} ParserInstance
  * @typedef {new () => ParserInstance} ParserConstructor
  *
  * @typedef Options
- * @property {string[]} [ignore]
- * @property {string[]} [source]
+ * @property {Array<string>} [ignore]
+ * @property {Array<string>} [source]
  *
  * @typedef Context
  * @property {string} doc
  * @property {Location} place
  * @property {ParserInstance} parser
- * @property {string[]} ignore
- * @property {string[]} source
+ * @property {Array<string>} ignore
+ * @property {Array<string>} source
  */
 
 import {toString} from 'nlcst-to-string'
@@ -101,7 +100,7 @@ export function toNlcst(tree, file, Parser, options = {}) {
  * Transform a single node.
  * @param {Context} config
  * @param {MdastNode} node
- * @returns {NlcstContent[]|undefined}
+ * @returns {Array<NlcstContent>|undefined}
  */
 function one(config, node) {
   const start = node.position ? node.position.start.offset : undefined
@@ -145,11 +144,11 @@ function one(config, node) {
  * Transform all nodes in `parent`.
  * @param {Context} config
  * @param {MdastParent} parent
- * @returns {NlcstContent[]}
+ * @returns {Array<NlcstContent>}
  */
 function all(config, parent) {
   let index = -1
-  /** @type {NlcstContent[]} */
+  /** @type {Array<NlcstContent>} */
   const results = []
   /** @type {Point|undefined} */
   let end
@@ -188,7 +187,7 @@ function all(config, parent) {
  * Patch a position on each node in `nodes`.
  * `offset` is the offset in `file` this run of content starts at.
  *
- * @template {NlcstContent[]} T
+ * @template {Array<NlcstContent>} T
  * @param {Context} config
  * @param {T} nodes
  * @param {number|undefined} offset

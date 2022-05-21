@@ -82,13 +82,13 @@ For example, [`parse-english`][english], [`parse-dutch`][dutch], or
 
 ###### `options.ignore`
 
-List of [types][type] to ignore (`Array.<string>`).
+List of [types][type] to ignore (`Array<string>`).
 
 `'table'`, `'tableRow'`, and `'tableCell'` are always ignored.
 
 ###### `options.source`
 
-List of [types][type] to mark as [source][] (`Array.<string>`).
+List of [types][type] to mark as [source][] (`Array<string>`).
 
 `'inlineCode'` is always marked as source.
 
