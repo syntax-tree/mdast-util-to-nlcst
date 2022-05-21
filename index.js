@@ -25,7 +25,9 @@
  *
  * @typedef Options
  * @property {Array<string>} [ignore]
+ *   List of mdast node types to ignore.
  * @property {Array<string>} [source]
+ *   List of mdast node types to mark as `source`.
  *
  * @typedef Context
  * @property {string} doc

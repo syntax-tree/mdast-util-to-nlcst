@@ -8,31 +8,82 @@
 [![Backers][backers-badge]][collective]
 [![Chat][chat-badge]][chat]
 
-[**mdast**][mdast] utility to transform to [**nlcst**][nlcst].
+[mdast][] utility to transform to [nlcst][].
 
-> **Note**: You probably want to use [`remark-retext`][remark-retext].
+## Contents
+
+*   [What is this?](#what-is-this)
+*   [When should I use this?](#when-should-i-use-this)
+*   [Install](#install)
+*   [Use](#use)
+*   [API](#api)
+    *   [`toNlcst(tree, file, Parser[, options])`](#tonlcsttree-file-parser-options)
+*   [Types](#types)
+*   [Compatibility](#compatibility)
+*   [Security](#security)
+*   [Related](#related)
+*   [Contribute](#contribute)
+*   [License](#license)
+
+## What is this?
+
+This package is a utility that takes an [mdast][] (markdown) syntax tree as
+input and turns it into [nlcst][] (natural language).
+
+## When should I use this?
+
+This project is useful when you want to deal with ASTs and inspect the natural
+language inside markdown.
+Unfortunately, there is no way yet to apply changes to the nlcst back into
+mdast.
+
+The hast utility [`hast-util-to-nlcst`][hast-util-to-nlcst] does the same but
+uses an HTML tree as input.
+
+The remark plugin [`remark-retext`][remark-retext] wraps this utility to do the
+same at a higher-level (easier) abstraction.
 
 ## Install
 
-This package is [ESM only](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c):
-Node 12+ is needed to use it and it must be `import`ed instead of `require`d.
-
-[npm][]:
+This package is [ESM only][esm].
+In Node.js (version 12.20+, 14.14+, or 16.0+), install with [npm][]:
 
 ```sh
 npm install mdast-util-to-nlcst
 ```
 
-## Use
+In Deno with [`esm.sh`][esmsh]:
 
 ```js
-import {VFile} from 'vfile'
+import {toNlcst} from "https://esm.sh/mdast-util-to-nlcst@5"
+```
+
+In browsers with [`esm.sh`][esmsh]:
+
+```html
+<script type="module">
+  import {toNlcst} from "https://esm.sh/mdast-util-to-nlcst@5?bundle"
+</script>
+```
+
+## Use
+
+Say we have the following `example.md`:
+
+```markdown
+Some *foo*sball.
+```
+
+…and next to it a module `example.js`:
+
+```js
+import {read} from 'to-vfile'
 import {ParseEnglish} from 'parse-english'
 import {inspect} from 'unist-util-inspect'
-import fromMarkdown from 'mdast-util-from-markdown'
+import {fromMarkdown} from 'mdast-util-from-markdown'
 import {toNlcst} from 'mdast-util-to-nlcst'
 
-const file = new VFile('Some *foo*sball.')
+const file = await read('example.md')
 const mdast = fromMarkdown(file)
 const nlcst = toNlcst(mdast, file, ParseEnglish)
 
@@ -56,49 +107,28 @@ RootNode[1] (1:1-1:17, 0-16)
 
 ## API
 
-This package exports the following identifiers: `toNlcst`.
+This package exports the identifier `toNlcst`.
 There is no default export.
 
 ### `toNlcst(tree, file, Parser[, options])`
 
-Transform a [tree][] in [mdast][], with a corresponding [virtual file][vfile],
-into [nlcst][].
+[mdast][] utility to transform to [nlcst][].
 
-##### Parameters
+> 👉 **Note**: `tree` must have positional info, `file` must be a [vfile][]
+> corresponding to `tree`, and `Parser` must be a parser such as
+> [`parse-english`][parse-english], [`parse-dutch`][parse-dutch], or
+> [`parse-latin`][parse-latin].
 
-###### `node`
+##### `options`
 
-Tree in [mdast][] with positional information ([`MdastNode`][mdastnode]).
-
-###### `file`
-
-Virtual file ([`VFile`][vfile]).
-
-###### `parser`
-
-[nlcst][] parser (`Function`).
-For example, [`parse-english`][english], [`parse-dutch`][dutch], or
-[`parse-latin`][latin].
+Configuration (optional).
 
 ###### `options.ignore`
 
-List of [types][type] to ignore (`Array<string>`).
+List of [mdast][] node types to ignore (`Array<string>`, optional).
+The types `'table'`, `'tableRow'`, and `'tableCell'` are always ignored.
 
-`'table'`, `'tableRow'`, and `'tableCell'` are always ignored.
-
-###### `options.source`
-
-List of [types][type] to mark as [source][] (`Array<string>`).
-
-`'inlineCode'` is always marked as source.
-
-##### Returns
-
-[`NlcstNode`][nlcstnode].
-
-##### Examples
-
-###### `ignore`
+<details><summary>Show example</summary>
 
 Say we have the following file `example.md`:
 
@@ -123,7 +153,15 @@ RootNode[2] (1:1-3:1, 0-14)
 └─1 WhiteSpaceNode "\n\n" (1:13-3:1, 12-14)
 ```
 
-###### `source`
+</details>
+
+###### `options.source`
+
+List of [mdast][] node types to mark as [nlcst][] source nodes
+(`Array<string>`, optional).
+The type `'inlineCode'` is always marked as source.
+
+<details><summary>Show example</summary>
 
 Say we have the following file `example.md`:
 
@@ -151,6 +189,24 @@ RootNode[3] (1:1-3:32, 0-45)
         └─0 SourceNode "> A paragraph in a block quote." (3:1-3:32, 14-45)
 ```
 
+</details>
+
+##### Returns
+
+[`NlcstNode`][nlcst-node].
+
+## Types
+
+This package is fully typed with [TypeScript][].
+It exports the type `Options`.
+
+## Compatibility
+
+Projects maintained by the unified collective are compatible with all maintained
+versions of Node.js.
+As of now, that is Node.js 12.20+, 14.14+, and 16.0+.
+Our projects sometimes work with older versions, but this is not guaranteed.
+
 ## Security
 
 Use of `mdast-util-to-nlcst` does not involve [**hast**][hast] so there are no
@@ -158,21 +214,21 @@ openings for [cross-site scripting (XSS)][xss] attacks.
 
 ## Related
 
-*   [`remark-retext`][remark-retext]
-    — **retext** support for **remark**
-*   [`hast-util-to-nlcst`](https://github.com/syntax-tree/hast-util-to-nlcst)
-    — Transform [hast][] to [nlcst][]
-*   [`hast-util-to-mdast`](https://github.com/syntax-tree/hast-util-to-mdast)
-    — Transform [hast][] to [mdast][]
-*   [`hast-util-to-xast`](https://github.com/syntax-tree/hast-util-to-xast)
-    — Transform [hast][] to [xast][]
 *   [`mdast-util-to-hast`](https://github.com/syntax-tree/mdast-util-to-hast)
-    — Transform [mdast][] to [hast][]
+    — transform mdast to hast
+*   [`hast-util-to-nlcst`](https://github.com/syntax-tree/hast-util-to-nlcst)
+    — transform hast to nlcst
+*   [`hast-util-to-mdast`](https://github.com/syntax-tree/hast-util-to-mdast)
+    — transform hast to mdast
+*   [`hast-util-to-xast`](https://github.com/syntax-tree/hast-util-to-xast)
+    — transform hast to xast
+*   [`hast-util-sanitize`](https://github.com/syntax-tree/hast-util-sanitize)
+    — sanitize hast nodes
 
 ## Contribute
 
-See [`contributing.md` in `syntax-tree/.github`][contributing] for ways to get
-started.
+See [`contributing.md`][contributing] in [`syntax-tree/.github`][health] for
+ways to get started.
 See [`support.md`][support] for ways to get help.
 
 This project has a [code of conduct][coc].
@@ -213,42 +269,42 @@ abide by its terms.
 
 [npm]: https://docs.npmjs.com/cli/install
 
+[esm]: https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c
+
+[esmsh]: https://esm.sh
+
+[typescript]: https://www.typescriptlang.org
+
 [license]: license
 
 [author]: https://wooorm.com
 
-[contributing]: https://github.com/syntax-tree/.github/blob/HEAD/contributing.md
+[health]: https://github.com/syntax-tree/.github
 
-[support]: https://github.com/syntax-tree/.github/blob/HEAD/support.md
+[contributing]: https://github.com/syntax-tree/.github/blob/main/contributing.md
 
-[coc]: https://github.com/syntax-tree/.github/blob/HEAD/code-of-conduct.md
+[support]: https://github.com/syntax-tree/.github/blob/main/support.md
+
+[coc]: https://github.com/syntax-tree/.github/blob/main/code-of-conduct.md
+
+[xss]: https://en.wikipedia.org/wiki/Cross-site_scripting
 
 [mdast]: https://github.com/syntax-tree/mdast
 
 [nlcst]: https://github.com/syntax-tree/nlcst
 
+[nlcst-node]: https://github.com/syntax-tree/nlcst#node
+
 [hast]: https://github.com/syntax-tree/hast
 
-[xast]: https://github.com/syntax-tree/xast
+[hast-util-to-nlcst]: https://github.com/syntax-tree/hast-util-to-nlcst
 
 [remark-retext]: https://github.com/remarkjs/remark-retext
 
 [vfile]: https://github.com/vfile/vfile
 
-[english]: https://github.com/wooorm/parse-english
+[parse-english]: https://github.com/wooorm/parse-english
 
-[latin]: https://github.com/wooorm/parse-latin
+[parse-latin]: https://github.com/wooorm/parse-latin
 
-[dutch]: https://github.com/wooorm/parse-dutch
-
-[type]: https://github.com/syntax-tree/mdast#ast
-
-[source]: https://github.com/syntax-tree/nlcst#source
-
-[tree]: https://github.com/syntax-tree/unist#tree
-
-[mdastnode]: https://github.com/syntax-tree/mdast#nodes
-
-[nlcstnode]: https://github.com/syntax-tree/nlcst#nodes
-
-[xss]: https://en.wikipedia.org/wiki/Cross-site_scripting
+[parse-dutch]: https://github.com/wooorm/parse-dutch
