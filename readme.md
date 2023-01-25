@@ -175,7 +175,7 @@ RootNode[2] (1:1-3:1, 0-14)
 
 </details>
 
-###### `options.source`
+###### `source`
 
 List of [mdast][] node types to mark as [nlcst][] source nodes
 (`Array<string>`, optional).
