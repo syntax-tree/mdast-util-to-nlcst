@@ -18,6 +18,9 @@
 *   [Use](#use)
 *   [API](#api)
     *   [`toNlcst(tree, file, Parser[, options])`](#tonlcsttree-file-parser-options)
+    *   [`Options`](#options)
+    *   [`ParserConstructor`](#parserconstructor)
+    *   [`ParserInstance`](#parserinstance)
 *   [Types](#types)
 *   [Compatibility](#compatibility)
 *   [Security](#security)
@@ -46,7 +49,7 @@ same at a higher-level (easier) abstraction.
 ## Install
 
 This package is [ESM only][esm].
-In Node.js (version 12.20+, 14.14+, or 16.0+), install with [npm][]:
+In Node.js (version 14.14+ and 16.0+), install with [npm][]:
 
 ```sh
 npm install mdast-util-to-nlcst
@@ -55,14 +58,14 @@ npm install mdast-util-to-nlcst
 In Deno with [`esm.sh`][esmsh]:
 
 ```js
-import {toNlcst} from "https://esm.sh/mdast-util-to-nlcst@5"
+import {toNlcst} from 'https://esm.sh/mdast-util-to-nlcst@5'
 ```
 
 In browsers with [`esm.sh`][esmsh]:
 
 ```html
 <script type="module">
-  import {toNlcst} from "https://esm.sh/mdast-util-to-nlcst@5?bundle"
+  import {toNlcst} from 'https://esm.sh/mdast-util-to-nlcst@5?bundle'
 </script>
 ```
 
@@ -107,25 +110,42 @@ RootNode[1] (1:1-1:17, 0-16)
 
 ## API
 
-This package exports the identifier `toNlcst`.
+This package exports the identifier [`toNlcst`][api-tonlcst].
 There is no default export.
 
 ### `toNlcst(tree, file, Parser[, options])`
 
-[mdast][] utility to transform to [nlcst][].
+Turn an mdast tree into an nlcst tree.
 
-> 👉 **Note**: `tree` must have positional info, `file` must be a [vfile][]
-> corresponding to `tree`, and `Parser` must be a parser such as
-> [`parse-english`][parse-english], [`parse-dutch`][parse-dutch], or
-> [`parse-latin`][parse-latin].
+> 👉 **Note**: `tree` must have positional info and `file` must be a `VFile`
+> corresponding to `tree`.
 
-##### `options`
+###### Parameters
 
-Configuration (optional).
+*   `tree` ([`MdastNode`][mdast-node])
+    — mdast tree to transform
+*   `file` ([`VFile`][vfile])
+    — virtual file
+*   `Parser` ([`ParserConstructor`][api-parserconstructor] or
+    [`ParserInstance`][api-parserinstance])
+    — parser to use
+*   `options` ([`Options`][api-options], optional)
+    — configuration
 
-###### `options.ignore`
+###### Returns
+
+nlcst tree ([`NlcstNode`][nlcst-node]).
+
+### `Options`
+
+Configuration (TypeScript type).
+
+##### Fields
+
+###### `ignore`
 
 List of [mdast][] node types to ignore (`Array<string>`, optional).
+
 The types `'table'`, `'tableRow'`, and `'tableCell'` are always ignored.
 
 <details><summary>Show example</summary>
@@ -159,6 +179,7 @@ RootNode[2] (1:1-3:1, 0-14)
 
 List of [mdast][] node types to mark as [nlcst][] source nodes
 (`Array<string>`, optional).
+
 The type `'inlineCode'` is always marked as source.
 
 <details><summary>Show example</summary>
@@ -191,14 +212,41 @@ RootNode[3] (1:1-3:32, 0-45)
 
 </details>
 
-##### Returns
+### `ParserConstructor`
 
-[`NlcstNode`][nlcst-node].
+Create a new parser (TypeScript type).
+
+###### Type
+
+```ts
+type ParserConstructor = new () => ParserInstance
+```
+
+### `ParserInstance`
+
+nlcst parser (TypeScript type).
+
+For example, [`parse-dutch`][parse-dutch], [`parse-english`][parse-english], or
+[`parse-latin`][parse-latin].
+
+###### Type
+
+```ts
+type ParserInstance = {
+  tokenizeSentencePlugins: ((node: NlcstSentence) => void)[]
+  tokenizeParagraphPlugins: ((node: NlcstParagraph) => void)[]
+  tokenizeRootPlugins: ((node: NlcstRoot) => void)[]
+  parse(value: string | null | undefined): NlcstRoot
+  tokenize(value: string | null | undefined): Array<NlcstSentenceContent>
+}
+```
 
 ## Types
 
 This package is fully typed with [TypeScript][].
-It exports the types `Options`, `ParserConstructor`, and `ParserInstance`.
+It exports the types [`Options`][api-options],
+[`ParserConstructor`][api-parserconstructor], and
+[`ParserInstance`][api-parserinstance].
 
 ## Compatibility
 
@@ -291,6 +339,8 @@ abide by its terms.
 
 [mdast]: https://github.com/syntax-tree/mdast
 
+[mdast-node]: https://github.com/syntax-tree/mdast#nodes
+
 [nlcst]: https://github.com/syntax-tree/nlcst
 
 [nlcst-node]: https://github.com/syntax-tree/nlcst#node
@@ -308,3 +358,11 @@ abide by its terms.
 [parse-latin]: https://github.com/wooorm/parse-latin
 
 [parse-dutch]: https://github.com/wooorm/parse-dutch
+
+[api-tonlcst]: #tonlcsttree-file-parser-options
+
+[api-options]: #options
+
+[api-parserconstructor]: #parserconstructor
+
+[api-parserinstance]: #parserinstance
