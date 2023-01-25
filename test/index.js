@@ -14,11 +14,8 @@ import {remark} from 'remark'
 import remarkGfm from 'remark-gfm'
 import remarkFrontmatter from 'remark-frontmatter'
 import {toVFile as vfile} from 'to-vfile'
-// @ts-expect-error: to do type.
 import {ParseLatin} from 'parse-latin'
-// @ts-expect-error: to do type.
 import {ParseDutch} from 'parse-dutch'
-// @ts-expect-error: to do type.
 import {ParseEnglish} from 'parse-english'
 import {isHidden} from 'is-hidden'
 import {toNlcst} from '../index.js'
