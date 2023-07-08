@@ -49,7 +49,7 @@ same at a higher-level (easier) abstraction.
 ## Install
 
 This package is [ESM only][esm].
-In Node.js (version 14.14+ and 16.0+), install with [npm][]:
+In Node.js (version 16+), install with [npm][]:
 
 ```sh
 npm install mdast-util-to-nlcst
@@ -80,11 +80,11 @@ Some *foo*sball.
 …and next to it a module `example.js`:
 
 ```js
-import {read} from 'to-vfile'
-import {ParseEnglish} from 'parse-english'
-import {inspect} from 'unist-util-inspect'
 import {fromMarkdown} from 'mdast-util-from-markdown'
 import {toNlcst} from 'mdast-util-to-nlcst'
+import {ParseEnglish} from 'parse-english'
+import {read} from 'to-vfile'
+import {inspect} from 'unist-util-inspect'
 
 const file = await read('example.md')
 const mdast = fromMarkdown(file)
@@ -110,7 +110,7 @@ RootNode[1] (1:1-1:17, 0-16)
 
 ## API
 
-This package exports the identifier [`toNlcst`][api-tonlcst].
+This package exports the identifier [`toNlcst`][api-to-nlcst].
 There is no default export.
 
 ### `toNlcst(tree, file, Parser[, options])`
@@ -126,8 +126,8 @@ Turn an mdast tree into an nlcst tree.
     — mdast tree to transform
 *   `file` ([`VFile`][vfile])
     — virtual file
-*   `Parser` ([`ParserConstructor`][api-parserconstructor] or
-    [`ParserInstance`][api-parserinstance])
+*   `Parser` ([`ParserConstructor`][api-parser-constructor] or
+    [`ParserInstance`][api-parser-instance])
     — parser to use
 *   `options` ([`Options`][api-options], optional)
     — configuration
@@ -245,15 +245,18 @@ type ParserInstance = {
 
 This package is fully typed with [TypeScript][].
 It exports the types [`Options`][api-options],
-[`ParserConstructor`][api-parserconstructor], and
-[`ParserInstance`][api-parserinstance].
+[`ParserConstructor`][api-parser-constructor], and
+[`ParserInstance`][api-parser-instance].
 
 ## Compatibility
 
-Projects maintained by the unified collective are compatible with all maintained
+Projects maintained by the unified collective are compatible with maintained
 versions of Node.js.
-As of now, that is Node.js 12.20+, 14.14+, and 16.0+.
-Our projects sometimes work with older versions, but this is not guaranteed.
+
+When we cut a new major release, we drop support for unmaintained versions of
+Node.
+This means we try to keep the current release line, `mdast-util-to-nlcst@^6`,
+compatible with Node.js 12.
 
 ## Security
 
@@ -301,9 +304,9 @@ abide by its terms.
 
 [downloads]: https://www.npmjs.com/package/mdast-util-to-nlcst
 
-[size-badge]: https://img.shields.io/bundlephobia/minzip/mdast-util-to-nlcst.svg
+[size-badge]: https://img.shields.io/badge/dynamic/json?label=minzipped%20size&query=$.size.compressedSize&url=https://deno.bundlejs.com/?q=mdast-util-to-nlcst
 
-[size]: https://bundlephobia.com/result?p=mdast-util-to-nlcst
+[size]: https://bundlejs.com/?q=mdast-util-to-nlcst
 
 [sponsors-badge]: https://opencollective.com/unified/sponsors/badge.svg
 
@@ -359,10 +362,10 @@ abide by its terms.
 
 [parse-dutch]: https://github.com/wooorm/parse-dutch
 
-[api-tonlcst]: #tonlcsttree-file-parser-options
+[api-to-nlcst]: #tonlcsttree-file-parser-options
 
 [api-options]: #options
 
-[api-parserconstructor]: #parserconstructor
+[api-parser-constructor]: #parserconstructor
 
-[api-parserinstance]: #parserinstance
+[api-parser-instance]: #parserinstance
