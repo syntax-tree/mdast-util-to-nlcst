@@ -1,7 +1,7 @@
 /**
  * @typedef {import('mdast').Root} Root
  * @typedef {import('mdast-util-from-markdown').Options} FromMarkdownOptions
- * @typedef {import('../index.js').Options} Options
+ * @typedef {import('mdast-util-to-nlcst').Options} Options
  */
 
 /**
@@ -19,6 +19,7 @@ import {isHidden} from 'is-hidden'
 import {fromMarkdown} from 'mdast-util-from-markdown'
 import {frontmatterFromMarkdown} from 'mdast-util-frontmatter'
 import {gfmFromMarkdown} from 'mdast-util-gfm'
+import {toNlcst} from 'mdast-util-to-nlcst'
 import {frontmatter} from 'micromark-extension-frontmatter'
 import {gfm} from 'micromark-extension-gfm'
 import {ParseLatin} from 'parse-latin'
@@ -26,11 +27,10 @@ import {ParseDutch} from 'parse-dutch'
 import {ParseEnglish} from 'parse-english'
 import {read} from 'to-vfile'
 import {VFile} from 'vfile'
-import {toNlcst} from '../index.js'
 
 test('toNlcst', async function (t) {
   await t.test('should expose the public api', async function () {
-    assert.deepEqual(Object.keys(await import('../index.js')).sort(), [
+    assert.deepEqual(Object.keys(await import('mdast-util-to-nlcst')).sort(), [
       'toNlcst'
     ])
   })
