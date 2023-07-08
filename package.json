@@ -35,13 +35,13 @@
     "index.js"
   ],
   "dependencies": {
-    "@types/mdast": "^3.0.0",
-    "@types/nlcst": "^1.0.0",
-    "@types/unist": "^2.0.0",
+    "@types/mdast": "^4.0.0",
+    "@types/nlcst": "^2.0.0",
+    "@types/unist": "^3.0.0",
     "nlcst-to-string": "^3.0.0",
-    "unist-util-position": "^4.0.0",
-    "vfile": "^5.0.0",
-    "vfile-location": "^4.0.0"
+    "unist-util-position": "^5.0.0",
+    "vfile": "^6.0.0",
+    "vfile-location": "^5.0.0"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
@@ -58,7 +58,7 @@
     "prettier": "^2.0.0",
     "remark-cli": "^11.0.0",
     "remark-preset-wooorm": "^9.0.0",
-    "to-vfile": "^7.0.0",
+    "to-vfile": "^8.0.0",
     "type-coverage": "^2.0.0",
     "typescript": "^5.0.0",
     "xo": "^0.54.0"

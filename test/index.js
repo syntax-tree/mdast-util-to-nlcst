@@ -271,7 +271,8 @@ test('fixtures', async () => {
       config.extensions.push(frontmatter())
     }
 
-    const mdast = fromMarkdown(String(input), config)
+    // To do: remove cast when `from-markdown` releases.
+    const mdast = /** @type {Root} */ (fromMarkdown(String(input), config))
 
     assert.deepEqual(
       toNlcst(mdast, input, ParseLatin, options),
