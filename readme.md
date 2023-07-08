@@ -58,14 +58,14 @@ npm install mdast-util-to-nlcst
 In Deno with [`esm.sh`][esmsh]:
 
 ```js
-import {toNlcst} from 'https://esm.sh/mdast-util-to-nlcst@6'
+import {toNlcst} from 'https://esm.sh/mdast-util-to-nlcst@7'
 ```
 
 In browsers with [`esm.sh`][esmsh]:
 
 ```html
 <script type="module">
-  import {toNlcst} from 'https://esm.sh/mdast-util-to-nlcst@6?bundle'
+  import {toNlcst} from 'https://esm.sh/mdast-util-to-nlcst@7?bundle'
 </script>
 ```
 
