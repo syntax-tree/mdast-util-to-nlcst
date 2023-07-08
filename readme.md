@@ -233,9 +233,9 @@ For example, [`parse-dutch`][parse-dutch], [`parse-english`][parse-english], or
 
 ```ts
 type ParserInstance = {
-  tokenizeSentencePlugins: ((node: NlcstSentence) => void)[]
-  tokenizeParagraphPlugins: ((node: NlcstParagraph) => void)[]
-  tokenizeRootPlugins: ((node: NlcstRoot) => void)[]
+  tokenizeSentencePlugins: ((node: NlcstSentence) => undefined)[]
+  tokenizeParagraphPlugins: ((node: NlcstParagraph) => undefined)[]
+  tokenizeRootPlugins: ((node: NlcstRoot) => undefined)[]
   parse(value: string | null | undefined): NlcstRoot
   tokenize(value: string | null | undefined): Array<NlcstSentenceContent>
 }
