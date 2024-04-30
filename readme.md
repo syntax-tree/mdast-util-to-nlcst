@@ -12,21 +12,21 @@
 
 ## Contents
 
-*   [What is this?](#what-is-this)
-*   [When should I use this?](#when-should-i-use-this)
-*   [Install](#install)
-*   [Use](#use)
-*   [API](#api)
-    *   [`toNlcst(tree, file, Parser[, options])`](#tonlcsttree-file-parser-options)
-    *   [`Options`](#options)
-    *   [`ParserConstructor`](#parserconstructor)
-    *   [`ParserInstance`](#parserinstance)
-*   [Types](#types)
-*   [Compatibility](#compatibility)
-*   [Security](#security)
-*   [Related](#related)
-*   [Contribute](#contribute)
-*   [License](#license)
+* [What is this?](#what-is-this)
+* [When should I use this?](#when-should-i-use-this)
+* [Install](#install)
+* [Use](#use)
+* [API](#api)
+  * [`toNlcst(tree, file, Parser[, options])`](#tonlcsttree-file-parser-options)
+  * [`Options`](#options)
+  * [`ParserConstructor`](#parserconstructor)
+  * [`ParserInstance`](#parserinstance)
+* [Types](#types)
+* [Compatibility](#compatibility)
+* [Security](#security)
+* [Related](#related)
+* [Contribute](#contribute)
+* [License](#license)
 
 ## What is this?
 
@@ -122,15 +122,15 @@ Turn an mdast tree into an nlcst tree.
 
 ###### Parameters
 
-*   `tree` ([`MdastNode`][mdast-node])
-    — mdast tree to transform
-*   `file` ([`VFile`][vfile])
-    — virtual file
-*   `Parser` ([`ParserConstructor`][api-parser-constructor] or
-    [`ParserInstance`][api-parser-instance])
-    — parser to use
-*   `options` ([`Options`][api-options], optional)
-    — configuration
+* `tree` ([`MdastNode`][mdast-node])
+  — mdast tree to transform
+* `file` ([`VFile`][vfile])
+  — virtual file
+* `Parser` ([`ParserConstructor`][api-parser-constructor] or
+  [`ParserInstance`][api-parser-instance])
+  — parser to use
+* `options` ([`Options`][api-options], optional)
+  — configuration
 
 ###### Returns
 
@@ -265,16 +265,16 @@ openings for [cross-site scripting (XSS)][xss] attacks.
 
 ## Related
 
-*   [`mdast-util-to-hast`](https://github.com/syntax-tree/mdast-util-to-hast)
-    — transform mdast to hast
-*   [`hast-util-to-nlcst`](https://github.com/syntax-tree/hast-util-to-nlcst)
-    — transform hast to nlcst
-*   [`hast-util-to-mdast`](https://github.com/syntax-tree/hast-util-to-mdast)
-    — transform hast to mdast
-*   [`hast-util-to-xast`](https://github.com/syntax-tree/hast-util-to-xast)
-    — transform hast to xast
-*   [`hast-util-sanitize`](https://github.com/syntax-tree/hast-util-sanitize)
-    — sanitize hast nodes
+* [`mdast-util-to-hast`](https://github.com/syntax-tree/mdast-util-to-hast)
+  — transform mdast to hast
+* [`hast-util-to-nlcst`](https://github.com/syntax-tree/hast-util-to-nlcst)
+  — transform hast to nlcst
+* [`hast-util-to-mdast`](https://github.com/syntax-tree/hast-util-to-mdast)
+  — transform hast to mdast
+* [`hast-util-to-xast`](https://github.com/syntax-tree/hast-util-to-xast)
+  — transform hast to xast
+* [`hast-util-sanitize`](https://github.com/syntax-tree/hast-util-sanitize)
+  — sanitize hast nodes
 
 ## Contribute
 
